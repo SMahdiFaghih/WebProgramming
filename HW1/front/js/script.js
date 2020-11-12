@@ -38,6 +38,7 @@ function getLine(serverType) {
 }
 
 function showError(error) {
+    console.log(error)
     $('#errorModal').modal('show');
     errorMessage.innerText = error || 'Seems like there has been a problem in connections'
 }
@@ -60,6 +61,6 @@ function sendRequest(type, url, payload) {
         .then(result => JSON.parse(result))
         .catch(error => {
             console.error(error);
-            showError(error.errorMessage);
+            showError(error);
         });
 }
