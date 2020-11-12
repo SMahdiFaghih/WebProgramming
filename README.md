@@ -19,52 +19,39 @@ WebProgramming Project and HomeWorks (99 Fall semester)
 ## nodejs 
 run ```npm install``` in nodejs directory to install requirements
 ### node service
+```
 [Unit]
 Description=node-app
-
 [Service]
 Type=simple
-
 Restart=always
-
 RestartSec=2s
-
 #adress of your input.txt file
-
 WorkingDirectory=/root/WebProgramming/HW1/nodejs
-
 #adress of your nodejs project
-
 ExecStart=/usr/bin/node /root/WebProgramming/HW1/nodejs/sha256.js
-
 [Install]
 WantedBy=multi-user.target
+```
 
 
 ## go
 run ```go build sha256.go``` in go directory
 ### go service
+```
 [Unit]
 Description=go-app
-
 [Service]
 Type=simple
-
 Restart=always
-
 RestartSec=2s
-
 #adress of your input.txt file
-
 WorkingDirectory=/root/WebProgramming/HW1/go
-
 #adress of your built go project
-
 ExecStart=/root/WebProgramming/HW1/go/sha256
-
 [Install]
 WantedBy=multi-user.target
-
+```
 
 ## locust
 after installing locust using ```pip3 install locust```, run locust command in the project locust folder. Then go to 127.0.0.1:8089 and start testing!
