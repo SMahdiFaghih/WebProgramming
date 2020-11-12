@@ -58,5 +58,8 @@ function sendRequest(type, url, payload) {
     return fetch(url, requestOptions)
         .then(response => response.text())
         .then(result => JSON.parse(result))
-        .catch(error => showError(error));
+        .catch(error => {
+            console.error(error);
+            showError(error.errorMessage);
+        });
 }
