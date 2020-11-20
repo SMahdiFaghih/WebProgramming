@@ -1,7 +1,10 @@
+@import "./bootstrap.scss";
+@import "./login.scss";
+
 body {
   font-family: "Samim", sans-serif;
-  background-color: theme-color("dark");
 }
+
 .navbar {
   z-index: 3;
   height: 70px;
@@ -22,4 +25,12 @@ body {
 }
 
 @media screen and (max-width: 599px) {
+}
+
+.ltr {
+  direction: ltr !important;
+}
+
+.rtl {
+  direction: rtl !important;
 }
