@@ -1,75 +1,51 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="fa-IR">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link rel="stylesheet" href="../../dist/css/styles.css" />
-  </head>
 
-  <body>
-    <nav
-      class="navbar navbar-expand-lg navbar-dark bg-dark"
-      ,
-      style="color: red"
-    >
-      <div class="d-flex bd-highlight mb-3">
-        <div class="mr-auto p-2 bd-highlight">
-          <a class="navbar-brand" href="#">
-            <img
-              src="../assets/logo.png"
-              ,
-              width="100"
-              ,
-              height="50"
-            />
-          </a>
-        </div>
-        <div class="align-self-center" style="width: 50px">خانه</div>
-        <div class="align-self-center" style="width: 50px">داده ها</div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="../../dist/css/styles.css" />
+</head>
+
+<body dir="rtl">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light row align-items-center">
+    <div class="col-auto align-self-end">
+      <img src="../assets/logo.png" alt="" height="50px" />
+    </div>
+    <div class="col row justify-content-end align-items-center">
+      <div class="col">
+        <button type="button" class="btn btn-light">خانه</button>
+        <button type="button" class="btn btn-light text-primary">داده‌ها</button>
+        <button type="button" class="btn btn-light">ورود</button>
+        <button type="button" class="btn btn-dark">ثبت نام</button>
       </div>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
+    </div>
+  </nav>
+  <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="sidebar-sticky pt-3">
+      <h4>اعضای تیم:</h4>
+    </div>
+  </nav>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      ورود
+    </button>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      ثبت نام
+    </button>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="جستجو" aria-label="Search" />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        جستجو
       </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#"
-              >Home <span class="sr-only">(current)</span></a
-            >
-          </li>
-        </ul>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-          ورود
-        </button>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-          ثبت نام
-        </button>
-        <form class="form-inline my-2 my-lg-0">
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            placeholder="جستجو"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            جستجو
-          </button>
-        </form>
-      </div>
-    </nav>
-
+    </form>
+  </div>
+  <section>
     <table class="table table-striped">
       <thead>
         <tr class="table-dark">
@@ -112,5 +88,10 @@
         </tr>
       </tbody>
     </table>
-  </body>
+    <button type="button" id="next" class="btn btn-dark">بعدی</button>
+    <button type="button" id="previous" class="btn btn-dark">قبلی</button>
+  </section>
+  
+</body>
+
 </html>
