@@ -7,6 +7,8 @@ body {
 
 @media screen and (min-width: 600px) {
   .navbar {
+    position: absolute;
+    width: 100%;
     z-index: 3;
     height: 70px;
     margin: 0px 0px 0px 0px;
