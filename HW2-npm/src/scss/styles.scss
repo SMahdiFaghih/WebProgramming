@@ -5,43 +5,38 @@ body {
   font-family: "Samim", sans-serif;
 }
 
-.navbar {
-  z-index: 3;
-  height: 70px;
-  margin: 0px 0px 0px 0px;
-}
-
-.sidebar {
-  position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: 70px 0px 0px 0px;
-  width: 20%;
-  background-color: rgba(0, 0, 0, 0.1);
-  text-align: right;
-}
-
-.table{
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: 3% 20% 3% 5%;
-  width: 75%
-}
-
-#next{
-  margin: 0px 0px 0px 5%;
-  float: left;
-}
-
-#previous{
-  margin: 0px 20% 0px 0px;
-  float: right;
-}
-
-
 @media screen and (min-width: 600px) {
+  .navbar {
+    z-index: 3;
+    height: 70px;
+    margin: 0px 0px 0px 0px;
+  }
+  
+  .sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 70px 0px 0px 0px;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0.1);
+    text-align: right;
+  }
+
+  .container{
+    max-width: none;
+    padding: 20px 320px 20px 20px;
+  }
+  
+  #next{
+    margin: 0px 0px 0px 0px;
+    float: left;
+  }
+  
+  #previous{
+    margin: 0px 0px 0px 0px;
+    float: right;
+  }
 }
 
 @media screen and (max-width: 599px) {
