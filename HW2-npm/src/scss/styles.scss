@@ -64,15 +64,40 @@ body {
     justify-content: center;
   }
 
+  .card-body{
+    padding: 10%;
+  }
+
   .card-deck .card{
     min-width: 20.5%;
     max-width: 23%;
     align-items: center;
   }
-  
+
+  .card-text{
+    font-size: 1.5vw;
+  }
+
 }
 
 @media screen and (max-width: 599px) {
+  .card-deck{
+    justify-content: center;
+  }
+
+ .card-body{
+    padding: 10%;
+  }
+
+  .card-deck .card{
+    min-width: 100%;
+    max-width: 100%;
+    align-items: center;
+  }
+
+  .card-text{
+    font-size: 5vw;
+  }
 }
 
 .ltr {
