@@ -2,12 +2,12 @@
 @import "./login.scss";
 
 body {
-  font-family: "Samim", sans-serif;
+  font-family: "Sahel", sans-serif;
 }
 
 @media screen and (min-width: 600px) {
   .navbar {
-    position: absolute;
+    position: fixed;
     width: 100%;
     z-index: 3;
     height: 70px;
@@ -25,9 +25,13 @@ body {
     text-align: right;
   }
 
+  .info{
+    padding: 20px 20px 20px 20px;
+  }
+
   .container{
     max-width: none;
-    padding: 20px 320px 20px 20px;
+    padding: 90px 320px 20px 20px;
   }
 
   .table{
