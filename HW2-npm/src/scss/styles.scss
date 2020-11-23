@@ -1,0 +1,100 @@
+@import "./bootstrap.scss";
+@import "./login.scss";
+@import "./home.scss";
+@import "./data.scss";
+
+body {
+  font-family: "Shabnam", sans-serif;
+  overflow-x: hidden;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+.footer.navbar {
+  top: auto;
+  bottom: 0;
+}
+
+.container {
+  height: 100vh;
+}
+
+// @media screen and (min-width: 600px) {
+//   .navbar {
+//     position: fixed;
+//     width: 100%;
+//     z-index: 3;
+//     height: 70px;
+//     margin: 0px 0px 0px 0px;
+//   }
+
+//   button {
+//     margin-right: 10px;
+//   }
+
+//   .sidebar {
+//     position: fixed;
+//     right: 0;
+//     top: 0;
+//     bottom: 0;
+//     margin: 70px 0px 0px 0px;
+//     width: 300px;
+//     background-color: rgba(0, 0, 0, 0.1);
+//     text-align: right;
+//   }
+
+//   .info {
+//     padding: 20px 20px 20px 20px;
+//   }
+
+//   .info > h4 {
+//     margin-bottom: 20px;
+//   }
+
+//   ul.team {
+//     list-style-type: square;
+//   }
+
+//   .container {
+//     max-width: none;
+//     padding: 90px 320px 20px 20px;
+//   }
+
+//   .table {
+//     text-align: right;
+//   }
+
+//   #next {
+//     margin: 0px 0px 0px 0px;
+//     float: left;
+//   }
+
+//   #previous {
+//     margin: 0px 0px 0px 0px;
+//     float: right;
+//   }
+
+//   .card-text {
+//     font-size: 1.5vw;
+//   }
+// }
+
+// @media screen and (max-width: 599px) {
+
+//   .card-text {
+//     font-size: 5vw;
+//   }
+// }
+
+.ltr {
+  direction: ltr !important;
+}
+
+.rtl {
+  direction: rtl !important;
+}

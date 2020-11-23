@@ -1,0 +1,10 @@
+.data-container {
+  padding-top: 70px;
+  @media screen and (max-width: 576px) {
+    padding-bottom: 60px;
+  }
+  .data-list {
+    padding: 40px;
+    margin: auto;
+  }
+}

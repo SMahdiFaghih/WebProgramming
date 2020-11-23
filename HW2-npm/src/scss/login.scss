@@ -1,0 +1,41 @@
+.login-container {
+  min-height: 100vh;
+  padding-top: 70px;
+  @media screen and (max-width: 576px) {
+    padding-bottom: 60px;
+  }
+  .login-box {
+    width: 80%;
+    max-width: 1000px;
+    @media screen and (max-width: 576px) {
+      width: 90%;
+      min-width: 350px;
+      max-width: 450px;
+    }
+    .login-form {
+      padding: 20px;
+      > .form-group {
+        > input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+          width: 300px;
+        }
+      }
+    }
+    .image-container {
+      padding: 20px;
+      position: relative;
+      .text-on-image {
+        text-shadow: -1px 0px 1px rgba(255, 255, 255, 1);
+        font-size: 30px;
+        font-weight: 800;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+      }
+    }
+  }
+}
