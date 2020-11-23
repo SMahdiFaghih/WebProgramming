@@ -1,5 +1,6 @@
 .data-container {
-  padding-top: 70px;
+  max-width: none;
+  padding: 70px 300px 0px 0px;
   @media screen and (max-width: 576px) {
     padding-bottom: 60px;
   }
