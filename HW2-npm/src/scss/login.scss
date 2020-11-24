@@ -14,7 +14,10 @@
     }
     .login-form {
       padding: 20px;
-      > .form-group {
+      .btn-group{
+        margin: 0px 25% 0px 25%;
+      }
+      .form-group {
         > input[type="text"],
         input[type="password"],
         input[type="email"] {
