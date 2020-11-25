@@ -18,6 +18,21 @@
       href="../assets/blue_favicon/favicon.ico?v=2"
       type="image/x-icon"
     />
+
+    <script>
+      window.transitionToPage = function (href) {
+        document.querySelector("body").style.opacity = 0;
+        setTimeout(function () {
+          window.location.href = href;
+        }, 500);
+      };
+      document.addEventListener("DOMContentLoaded", function (event) {
+        document.querySelector("body").style.opacity = 0;
+        setTimeout(function () {
+          document.querySelector("body").style.opacity = 1;
+        }, 500);
+      });
+    </script>
   </head>
 
   <body dir="rtl">
@@ -33,7 +48,7 @@
           </a>
           <a
             class="text-decoration-none d-none d-sm-inline"
-            href=".\data\index.html"
+            onclick="transitionToPage('.\\data\\index.html')"
           >
             <button type="button" class="btn btn-light">داده‌ها</button>
           </a>
