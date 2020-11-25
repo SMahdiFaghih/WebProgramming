@@ -6,5 +6,5 @@
   - dont forget ```setenforce 0```
   - use the nginx.conf in root directory 
   - run '''npm install''' to install requirements
-  - run '''npm run start''' to build project
+  - run '''npm run scss''' to build project
   - type your virtualmachine ip on your browser
