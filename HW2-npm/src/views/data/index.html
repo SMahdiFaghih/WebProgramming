@@ -21,39 +21,71 @@
   </head>
 
   <body dir="rtl">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-0">
       <div class="w-100 row align-items-center justify-content-between mx-3">
         <div class="col-auto row align-items-center">
-          <img src="../../assets/logo.png" alt="" height="50px" />
-          <a class="text-decoration-none d-none d-sm-inline" href="..\">
+          <img class="logo" src="../../assets/logo.png" alt="" height="50px" />
+          <a
+            class=" text-decoration-none d-none d-sm-inline ml-3"
+            href="..\"
+          >
             <button type="button" class="btn btn-light">خانه</button>
           </a>
-          <a class="text-decoration-none d-none d-sm-inline" href=".\">
+          <a class="active-link text-decoration-none d-none d-sm-inline" href=".\">
             <button type="button" class="btn btn-light">داده‌ها</button>
           </a>
         </div>
         <div class="col-auto row align-items-center">
-          <input
-            class="form-control w-auto ml-sm-3"
-            type="text"
-            placeholder="جست‌وجو"
-            aria-label="search"
-          />
           <a class="text-decoration-none d-none d-sm-inline" href="..\login">
-            <button type="button" class="btn btn-light text-primary">
+            <button type="button" class="btn btn-outline-primary ml-3">
               ورود
             </button>
           </a>
+          <a class="text-decoration-none d-none d-sm-inline" href="..\login">
+            <button type="button" class="btn btn-primary">ثبت‌نام</button>
+          </a>
+          <script>
+            const isSidebarOpen = false;
+            function openSidebar() {
+              document.getElementById("toggleButton").style.display = "none";
+              document.getElementById("close").style.display = "block";
+              document.getElementById("sidebar").classList.add("d-block");
+              document.getElementById("sidebar").classList.remove("d-none");
+            }
+            function closeSidebar() {
+              document.getElementById("toggleButton").style.display = "block";
+              document.getElementById("close").style.display = "none";
+              document.getElementById("sidebar").classList.add("d-none");
+              document.getElementById("sidebar").classList.remove("d-block");
+            }
+          </script>
+          <div
+            id="toggleButton"
+            class="toggle-button align-self-center d-sm-none"
+            onclick="openSidebar()"
+          >
+            <span class="toggle-btn-bar"></span>
+            <span class="toggle-btn-bar"></span>
+            <span class="toggle-btn-bar"></span>
+          </div>
+          <div
+            id="close"
+            class="close-button d-sm-none"
+            style="display: none"
+            onclick="closeSidebar()"
+          >
+            X
+          </div>
         </div>
       </div>
     </nav>
 
-    <div class="sidebar bg-primary-low">
-      <div class="text-right">
-        <h5 class="text-center p-3">اعضای تیم</h5>
-        <div class="px-4 py-2">فاطمه خاشعی</div>
-        <div class="px-4 py-2">سید مهدی فقیه</div>
-      </div>
+    <div id="sidebar" class="sidebar bg-primary text-right d-none d-sm-block">
+      <h5 class="text-center p-3">اعضای تیم</h5>
+      <ul class="mx-4">
+        <li class="py-2">فاطمه خاشعی</li>
+        <li class="py-2">سید مهدی فقیه</li>
+      </ul>
     </div>
 
     <div class="data-container">
@@ -185,10 +217,10 @@
           </div>
         </div>
         <div class="d-flex justify-content-between">
-          <button type="button" id="next" class="btn btn-third px-4">
+          <button type="button" id="next" class="btn btn-outline-primary px-4">
             بعدی
           </button>
-          <button type="button" id="previous" class="btn btn-primary px-4">
+          <button type="button" id="previous" class="btn btn-outline-primary px-4">
             قبلی
           </button>
         </div>
@@ -196,19 +228,28 @@
     </div>
 
     <nav
-      class="footer navbar navbar-expand-lg navbar-light bg-light shadow-lg d-sm-none"
+    class="footer navbar navbar-expand-lg navbar-light bg-light shadow-lg d-sm-none"
+  >
+    <div
+      class="w-100 row align-items-center justify-content-around flex-nowrap mx-3"
     >
-      <div class="w-100 row align-items-center justify-content-around mx-3">
-        <a class="text-decoration-none" href=".\">
-          <button type="button" class="btn btn-light">خانه</button>
-        </a>
-        <a class="text-decoration-none" href=".\data">
-          <button type="button" class="btn btn-light">داده‌ها</button>
-        </a>
-        <a class="text-decoration-none" href=".\login">
-          <button type="button" class="btn btn-light text-primary">ورود</button>
-        </a>
-      </div>
-    </nav>
+      <a class="text-decoration-none" href="..\">
+        <button type="button" class="btn btn-light text-primary">خانه</button>
+      </a>
+      <a class="active-link text-decoration-none" href=".\">
+        <button type="button" class="btn btn-light text-primary">
+          داده‌ها
+        </button>
+      </a>
+      <a class="text-decoration-none" href="..\login">
+        <button type="button" class="btn btn-light text-primary">ورود</button>
+      </a>
+      <a class="text-decoration-none" href="..\login">
+        <button type="button" class="btn btn-light text-primary">
+          ثبت‌نام
+        </button>
+      </a>
+    </div>
+  </nav>
   </body>
 </html>

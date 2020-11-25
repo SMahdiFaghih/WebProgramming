@@ -1,8 +1,10 @@
 .data-container {
   max-width: none;
-  padding: 70px 300px 0px 0px;
+  padding-top: 70px;
+  padding-right: 300px;
   @media screen and (max-width: 576px) {
     padding-bottom: 60px;
+    padding-right: 0;
   }
   .data-list {
     padding: 40px;

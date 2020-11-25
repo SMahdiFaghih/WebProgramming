@@ -1,126 +1,160 @@
 <!DOCTYPE html>
 <html lang="fa-IR">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Login</title>
+    <link
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../../../dist/css/styles.css" />
+    <link
+      rel="icon"
+      href="../../assets/blue_favicon/favicon.ico?v=2"
+      type="image/x-icon"
+    />
+    <script>
+      function gotoLogin() {
+        document.getElementsByClassName("register")[0].style.display = "none";
+        document.getElementsByClassName("login")[0].style.display = "inline";
+        document.getElementById("loginButton").classList.remove("bg-primary");
+        document.getElementById("loginButton").classList.add("bg-white");
+        document.getElementById("registerButton").classList.remove("bg-white");
+        document.getElementById("registerButton").classList.add("bg-primary");
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Login</title>
-  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css" rel="stylesheet"
-    type="text/css" />
-  <link rel="stylesheet" href="../../../dist/css/styles.css" />
-  <link rel="icon" href="../../assets/blue_favicon/favicon.ico?v=2" type="image/x-icon" />
-  <script>
-    function gotoLogin() {
-      document.getElementsByClassName("register")[0].style.display = "none";
-      document.getElementsByClassName("login")[0].style.display = "inline";
-    }
+      function gotoRegister() {
+        document.getElementsByClassName("login")[0].style.display = "none";
+        document.getElementsByClassName("register")[0].style.display = "inline";
+        document
+          .getElementById("registerButton")
+          .classList.remove("bg-primary");
+        document.getElementById("registerButton").classList.add("bg-white");
+        document.getElementById("loginButton").classList.add("bg-primary");
+        document.getElementById("loginButton").classList.remove("bg-white");
+      }
+    </script>
+  </head>
 
-    function gotoRegister() {
-      document.getElementsByClassName("login")[0].style.display = "none";
-      document.getElementsByClassName("register")[0].style.display = "inline";
-    }
-  </script>
-</head>
-
-<body dir="rtl">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-    <div class="w-100 row align-items-center justify-content-between mx-3">
-      <div class="col-auto row align-items-center">
-        <img src="../../assets/logo.png" alt="" height="50px" />
-        <a class="text-decoration-none d-none d-sm-inline" href="..\">
-          <button type="button" class="btn btn-light">خانه</button>
-        </a>
-        <a class="text-decoration-none d-none d-sm-inline" href="..\data">
-          <button type="button" class="btn btn-light">داده‌ها</button>
-        </a>
-      </div>
-      <div class="col-auto row align-items-center">
-        <input class="form-control w-auto ml-sm-3" type="text" placeholder="جست‌وجو" aria-label="search" />
-        <a class="text-decoration-none d-none d-sm-inline" href=".\">
-          <button type="button" class="btn btn-light text-primary">
-            ورود
-          </button>
-        </a>
-      </div>
-    </div>
-  </nav>
-
-  <div class="login-container d-flex align-items-center justify-content-center">
-    <div class="login-box row justify-content-center align-items-strech">
-      <div class="border d-flex align-items-center">
-        <form class="login-form rtl text-right">
-          <div class="register" style="display: none;">
-            <div class="btn-group justify-content-center" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-light" onclick="gotoLogin()">ورود</button>
-              <button type="button" class="btn btn-light text-primary">ثبت‌نام</button>
-            </div>
-            <div class="form-group">
-              <label for="name">نام</label>
-              <input type="text" placeholder="نام" class="form-control" id="name" />
-            </div>
-            <div class="form-group">
-              <label for="email">ایمیل</label>
-              <input type="email" placeholder="ایمیل" class="form-control" id="email" />
-            </div>
-            <div class="form-group">
-              <label for="password">رمز عبور</label>
-              <input type="password" placeholder="رمز‌عبور" class="form-control" id="password" />
-              <small id="passwordLength" class="form-text text-muted">حداقل ۸ کاراکتر باشد</small>
-            </div>
-            <div class="form-group form-check ltr">
-              <input type="checkbox" class="form-check-input" id="terms" />
-              <label class="form-check-label" for="terms">
-                قوانین و شرایط سایت را می‌پذیرم
-              </label>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
+  <body class="bg-primary-low" dir="rtl">
+    <nav
+      class="navbar navbar-expand-lg row align-items-center justify-content-between mx-3"
+    >
+      <img class="logo" src="../../assets/logo.png" alt="" height="50px" />
+      <a class="text-decoration-none" href="..\"> بازگشت به خانه > </a>
+    </nav>
+    <div
+      class="login-container d-flex align-items-center justify-content-center"
+    >
+      <div
+        class="login-box bg-primary row justify-content-center align-items-strech"
+      >
+        <div
+          class="login-form-container bg-white col-12 col-md-auto d-flex flex-column justify-content-center"
+        >
+          <div class="login-type">
+            <div
+              id="registerButton"
+              class="bg-primary"
+              onclick="gotoRegister()"
+            >
               ثبت‌نام
-            </button>
-          </div>
-
-          <div class="login" style="display: inline;">
-            <div class="btn-group justify-content-center" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-light text-primary">ورود</button>
-              <button type="button" class="btn btn-light" onclick="gotoRegister()">ثبت‌نام</button>
             </div>
-            <div class="form-group">
-              <label for="email">ایمیل</label>
-              <input type="email" placeholder="ایمیل" class="form-control" id="email" />
-            </div>
-            <div class="form-group">
-              <label for="password">رمز عبور</label>
-              <input type="password" placeholder="رمز‌عبور" class="form-control" id="password" />
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <div id="loginButton" class="bg-white" onclick="gotoLogin()">
               ورود
-            </button>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="image-container border d-none d-sm-flex align-items-center">
-        <picture class="login-image">
-          <source media="(max-width:999px)" srcset="../../assets/login_low_quality.png" />
-          <source media="(min-width:1000px)" srcset="../../assets/login.png" />
-          <img src="../../assets/login.png" alt="login image" width="400" />
-        </picture>
-        <span class="text-on-image text-fourth">Join Us Now</span>
+          <form
+            class="login-form rtl text-right d-flex align-items-center justify-content-center"
+          >
+            <div class="register" style="display: none">
+              <div class="form-group">
+                <label for="name">نام</label>
+                <input
+                  type="text"
+                  placeholder="نام"
+                  class="form-control"
+                  id="name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">ایمیل</label>
+                <input
+                  type="email"
+                  placeholder="ایمیل"
+                  class="form-control"
+                  id="email"
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input
+                  type="password"
+                  placeholder="رمز‌عبور"
+                  class="form-control"
+                  id="password"
+                />
+                <small id="passwordLength" class="form-text text-muted"
+                  >حداقل ۸ کاراکتر باشد</small
+                >
+              </div>
+              <div class="form-group form-check ltr">
+                <input type="checkbox" class="form-check-input" id="terms" />
+                <label class="form-check-label" for="terms">
+                  قوانین و شرایط سایت را می‌پذیرم
+                </label>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                ثبت‌نام
+              </button>
+            </div>
+            <div class="login" style="display: inline">
+              <div class="form-group">
+                <label for="email">ایمیل</label>
+                <input
+                  type="email"
+                  placeholder="ایمیل"
+                  class="form-control"
+                  id="email"
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">رمز عبور</label>
+                <input
+                  type="password"
+                  placeholder="رمز‌عبور"
+                  class="form-control"
+                  id="password"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">
+                ورود
+              </button>
+            </div>
+          </form>
+        </div>
+        <div
+          class="image-container col d-none d-md-flex justify-content-center align-items-center"
+        >
+          <picture class="login-image">
+            <source
+              media="(max-width:999px)"
+              srcset="../../assets/login_low.jpg"
+            />
+            <source
+              media="(min-width:1000px)"
+              srcset="../../assets/login.jpg"
+            />
+            <img src="../../assets/login.jpg" alt="login image" />
+          </picture>
+          <span class="text-on-image text-white">Join Us Now</span>
+        </div>
       </div>
     </div>
-  </div>
-
-  <nav class="footer navbar navbar-expand-lg navbar-light bg-light shadow-lg d-sm-none">
-    <div class="w-100 row align-items-center justify-content-around mx-3">
-      <a class="text-decoration-none" href=".\">
-        <button type="button" class="btn btn-light">خانه</button>
-      </a>
-      <a class="text-decoration-none" href=".\data">
-        <button type="button" class="btn btn-light">داده‌ها</button>
-      </a>
-      <a class="text-decoration-none" href=".\login">
-        <button type="button" class="btn btn-light text-primary">ورود</button>
-      </a>
-    </div>
-  </nav>
-</body>
-
+  </body>
 </html>
