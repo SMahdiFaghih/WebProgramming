@@ -18,33 +18,7 @@
       href="../../assets/blue_favicon/favicon.ico?v=2"
       type="image/x-icon"
     />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-      const loginType = window.location.search.replace("?", "") || "login";
-      function gotoLogin() {
-        document.getElementsByClassName("register")[0].style.display = "none";
-        document.getElementsByClassName("login")[0].style.display = "inline";
-        document.getElementById("loginButton").classList.remove("bg-primary");
-        document.getElementById("loginButton").classList.add("bg-white");
-        document.getElementById("registerButton").classList.remove("bg-white");
-        document.getElementById("registerButton").classList.add("bg-primary");
-      }
-
-      function gotoRegister() {
-        document.getElementsByClassName("login")[0].style.display = "none";
-        document.getElementsByClassName("register")[0].style.display = "inline";
-        document
-          .getElementById("registerButton")
-          .classList.remove("bg-primary");
-        document.getElementById("registerButton").classList.add("bg-white");
-        document.getElementById("loginButton").classList.add("bg-primary");
-        document.getElementById("loginButton").classList.remove("bg-white");
-      }
-      $(document).ready(function () {
-        if (loginType === "login") gotoLogin();
-        if (loginType === "register") gotoRegister();
-      });
-    </script>
+    <script src="../../js/main.js"></script>
   </head>
 
   <body class="bg-primary-low" dir="rtl">

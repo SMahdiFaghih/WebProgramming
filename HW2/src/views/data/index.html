@@ -18,19 +18,7 @@
       href="../../assets/blue_favicon/favicon.ico?v=2"
       type="image/x-icon"
     />
-    <script>
-      window.transitionToPage = function (href) {
-        document.querySelector("body").style.opacity = 0;
-        setTimeout(function () {
-          window.location.href = href;
-        }, 500);
-      };
-
-      document.addEventListener("DOMContentLoaded", function (event) {
-        document.querySelector("body").style.opacity = 0;
-        setTimeout(function (){document.querySelector("body").style.opacity = 1;}, 500);
-      });
-    </script>
+    <script src="../../js/main.js"></script>
   </head>
 
   <body dir="rtl">
@@ -57,21 +45,6 @@
           <a class="text-decoration-none d-none d-sm-inline" href="..\login\index.html?register">
             <button type="button" class="btn btn-primary">ثبت‌نام</button>
           </a>
-          <script>
-            const isSidebarOpen = false;
-            function openSidebar() {
-              document.getElementById("toggleButton").style.display = "none";
-              document.getElementById("close").style.display = "block";
-              document.getElementById("sidebar").classList.add("d-block");
-              document.getElementById("sidebar").classList.remove("d-none");
-            }
-            function closeSidebar() {
-              document.getElementById("toggleButton").style.display = "block";
-              document.getElementById("close").style.display = "none";
-              document.getElementById("sidebar").classList.add("d-none");
-              document.getElementById("sidebar").classList.remove("d-block");
-            }
-          </script>
           <div
             id="toggleButton"
             class="toggle-button align-self-center d-sm-none"
