@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Data</title>
+    <link
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="../../../dist/css/styles.css" />
+    <link
+      rel="icon"
+      href="../../assets/blue_favicon/favicon.ico?v=2"
+      type="image/x-icon"
+    />
+    <script src="../../js/main.js"></script>
+  </head>
+
+  <body dir="rtl">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-0">
+      <div class="w-100 row align-items-center justify-content-between mx-3">
+        <div class="col-auto row align-items-center">
+          <img class="logo" src="../../assets/logo.png" alt="" height="50px" />
+          <a
+            class=" text-decoration-none d-none d-sm-inline ml-3"
+            onclick="transitionToPage('..\\index.html')"
+          >
+            <button type="button" class="btn btn-light">خانه</button>
+          </a>
+          <a class="active-link text-decoration-none d-none d-sm-inline" href=".\index.html">
+            <button type="button" class="btn btn-light">داده‌ها</button>
+          </a>
+        </div>
+        <div class="col-auto row align-items-center">
+          <a class="text-decoration-none d-none d-sm-inline" href="..\login\index.html?login">
+            <button type="button" class="btn btn-outline-primary ml-3">
+              ورود
+            </button>
+          </a>
+          <a class="text-decoration-none d-none d-sm-inline" href="..\login\index.html?register">
+            <button type="button" class="btn btn-primary">ثبت‌نام</button>
+          </a>
+          <div
+            id="toggleButton"
+            class="toggle-button align-self-center d-sm-none"
+            onclick="openSidebar()"
+          >
+            <span class="toggle-btn-bar"></span>
+            <span class="toggle-btn-bar"></span>
+            <span class="toggle-btn-bar"></span>
+          </div>
+          <div
+            id="close"
+            class="close-button d-sm-none"
+            style="display: none"
+            onclick="closeSidebar()"
+          >
+            X
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div id="sidebar" class="sidebar bg-primary text-right d-none d-sm-block">
+      <h5 class="text-center p-3">اعضای تیم</h5>
+      <ul class="mx-4">
+        <li class="py-2">فاطمه خاشعی</li>
+        <li class="py-2">سید مهدی فقیه</li>
+      </ul>
+    </div>
+
+    <div class="data-container">
+      <div class="data-list">
+        <table class="table table-striped text-center d-none d-sm-table">
+          <thead>
+            <tr class="table-primary">
+              <th scope="col">رتبه</th>
+              <th scope="col">نام تیم</th>
+              <th scope="col">نام دانشگاه و کشور</th>
+              <th scope="col">امتیاز</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">۱</th>
+              <td>کوشا جان</td>
+              <td>دانشگاه صنعتی شریف، ایران</td>
+              <td>۱۳۰۵</td>
+            </tr>
+            <tr>
+              <th scope="row">۲</th>
+              <td>مبارزین تنها</td>
+              <td>دانشگاه امبرکبیر، ایران</td>
+              <td>۱۲۷۰</td>
+            </tr>
+            <tr>
+              <th scope="row">۳</th>
+              <td>حاجی درچه‌ای</td>
+              <td>دانشگاه علوم پزشکی اصفهان، اصفهان</td>
+              <td>۱۲۵۰</td>
+            </tr>
+            <tr>
+              <th scope="row">۴</th>
+              <td>عدالت و آزادی</td>
+              <td>دانشگاه آزاد قزوین، ایران</td>
+              <td>۱۱۰۵</td>
+            </tr>
+            <tr>
+              <th scope="row">۵</th>
+              <td>Beatles</td>
+              <td>دانشگاه ملی شوچنکو، اوکراین</td>
+              <td>۹۴۰</td>
+            </tr>
+            <tr>
+              <th scope="row">۶</th>
+              <td>الگل</td>
+              <td>دانشگاه آزاد اسلامی واحد علوم تحقیقات، تهران</td>
+              <td>۹۲۵</td>
+            </tr>
+            <tr>
+              <th scope="row">۷</th>
+              <td>عمال مناجم البيانات</td>
+              <td>دانشگاه علم و صنعت اردن، اردن</td>
+              <td>۸۷۰</td>
+            </tr>
+            <tr>
+              <th scope="row">۸</th>
+              <td>for a few dollars</td>
+              <td>دانشگاه سیستان و بلوچستان، ایران</td>
+              <td>۸۰۰</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-deck d-sm-none">
+          <div class="card bg-primary text-white text-right">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <span>رتبه</span>
+                <span>۱</span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between font-weight-bold">
+                <span>نام تیم</span>
+                <span>کوشا جان</span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between text-disable ">
+                <span>نام دانشگاه و کشور</span>
+                <span>دانشگاه صنعتی شریف، ایران</span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between font-weight-bold">
+                <span>امتیاز</span>
+                <span>۱۳۵۰</span>
+              </div>
+            </div>
+          </div>
+          <div class="card bg-secondary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-secondary">۱۲۷۰</div>
+              <h6 class="card-title">۲</h3>
+              <h5 class="card-title pr-2">مبارزین تنها</h5>
+              <p class="card-text pr-2">دانشگاه امبرکبیر، ایران</p>
+            </div>
+          </div>
+          <div class="card bg-primary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-primary">۱۲۵۰</div>
+              <h6 class="card-title">۳</h3>
+              <h5 class="card-title pr-2">حاجی درچه‌ای</h5>
+              <p class="card-text pr-2">دانشگاه علوم پزشکی اصفهان، اصفهان</p>
+            </div>
+          </div>
+          <div class="card bg-secondary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-secondary">۱۱۰۵</div>
+              <h6 class="card-title">۴</h3>
+              <h5 class="card-title pr-2">عدالت و آزادی</h5>
+              <p class="card-text pr-2">دانشگاه آزاد قزوین، ایران</p>
+            </div>
+          </div>
+          <div class="card bg-primary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-primary">۹۴۰</div>
+              <h6 class="card-title">۵</h3>
+              <h5 class="card-title pr-2">Beatles</h5>
+              <p class="card-text pr-2">دانشگاه ملی شوچنکو، اوکراین</p>
+            </div>
+          </div>
+          <div class="card bg-secondary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-secondary">۹۲۵</div>
+              <h6 class="card-title">۶</h3>
+              <h5 class="card-title pr-2">الگل</h5>
+              <p class="card-text pr-2">دانشگاه آزاد اسلامی واحد علوم تحقیقات، تهران</p>
+            </div>
+          </div>
+          <div class="card bg-primary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-primary">۸۷۰</div>
+              <h6 class="card-title">۷</h3>
+              <h5 class="card-title pr-2">عمال مناجم البيانات</h5>
+              <p class="card-text pr-2">دانشگاه علم و صنعت اردن، اردن</p>
+            </div>
+          </div>
+          <div class="card bg-secondary text-white text-right">
+            <div class="card-body">
+              <div class="float-left p-3 border bg-white text-secondary">۸۰۰</div>
+              <h6 class="card-title">۸</h3>
+              <h5 class="card-title pr-2">for a few dollars</h5>
+              <p class="card-text pr-2">دانشگاه سیستان و بلوچستان، ایران</p>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="button" id="previous" class="btn btn-outline-primary px-4">
+            قبلی
+          </button>
+          <button type="button" id="next" class="btn btn-outline-primary px-4">
+            بعدی
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav
+    class="footer navbar navbar-expand-lg navbar-light bg-light shadow-lg d-sm-none"
+  >
+    <div
+      class="w-100 row align-items-center justify-content-around flex-nowrap mx-3"
+    >
+      <a class="text-decoration-none" href="..\index.html">
+        <button type="button" class="btn btn-light text-primary">خانه</button>
+      </a>
+      <a class="active-link text-decoration-none" href=".\index.html">
+        <button type="button" class="btn btn-light text-primary">
+          داده‌ها
+        </button>
+      </a>
+      <a class="text-decoration-none" href="..\login\index.html?login">
+        <button type="button" class="btn btn-light text-primary">ورود</button>
+      </a>
+      <a class="text-decoration-none" href="..\login\index.html?register">
+        <button type="button" class="btn btn-light text-primary">
+          ثبت‌نام
+        </button>
+      </a>
+    </div>
+  </nav>
+  </body>
+</html>
