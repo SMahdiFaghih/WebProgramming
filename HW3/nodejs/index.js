@@ -54,15 +54,21 @@ ParseApp.post("/signin", (request, response) => {
   const query = new Parse.Query(Users);
   query.equalTo("email", email);
   query.limit(1);
-  const results = await query.find();
-  if (results.length == 0 || results[0].get("password" != password))
-  {
-    return response.status(401).json({ "message": "wrong email or password."});
-  }
-  var token = makeToken(64);
-  results[0].set("token", token);
-  results[0].save();
-  return response.status(200).json({ "token": token});
+  query.find().then((results) => {
+    if (results.length == 0 || results[0].get("password" != password))
+    {
+      return response.status(401).json({ "message": "wrong email or password."});
+    }
+    var token = makeToken(64);
+    results[0].set("token", token);
+    results[0].save().then(() => {
+      return response.status(200).json({ "token": token});
+    }, () => {
+      console.log('save failed');
+    });
+  }, () => {
+    console.log('find failed');
+  });
 });
 
 ParseApp.get("/signin", (req, response) => {
