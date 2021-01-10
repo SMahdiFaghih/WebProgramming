@@ -38,6 +38,7 @@ ParseApp.listen(1337, function() {
 Parse.initialize("myAppId");
 Parse.serverURL = 'http://localhost:1337/parse'
 
+var activeUsers = []
 
 ParseApp.post("/signin", (request, response) => {
   console.log("POST /signin");
@@ -60,12 +61,8 @@ ParseApp.post("/signin", (request, response) => {
       return response.status(401).json({ "message": "wrong email or password."});
     }
     var token = makeToken(64);
-    results[0].set("token", token);
-    results[0].save().then(() => {
-      return response.status(200).json({ "token": token});
-    }, () => {
-      console.log('save failed');
-    });
+    activeUsers.push({"email": email, "token":token});
+    return response.status(200).json({ "token": token});
   }, () => {
     console.log('find failed');
   });
@@ -144,8 +141,41 @@ ParseApp.get("/post", (req, response) => {
   }, (error) => {
     console.log('find posts failed');
   });
-}
+});
 
+ParseApp.post("/post/create", (request, response) => {
+  console.log("POST /post/create");
+  const token = request.headers.authorization;
+  var foundActiveUser = Object.keys(activeUsers).filter(function(key) 
+  {
+    return activeUsers[key].token == token;
+  });
+  if (foundActiveUser == null)
+  {
+    return response.status(401).json({ "message": "user is not valid"});
+  }
+  const title = request.body.title;
+  const content = request.body.content;
+  if (title == null)
+  {
+    return response.status(400).json({ "message": "filed `title` is not valid"});
+  }
+  if (Object.keys(request.body).length > 2)
+  {
+    return response.status(400).json({"message": "Request Length should be 2"});
+  }
+  const Post = Parse.Object.extend("Posts");
+  const newPost = new Post();
+  newPost.save({
+    title: title,
+    content: content
+  })
+  .then(() => {
+    return response.status(201).json({"message": "user has been created."});
+  }, () => {
+    console.log('create post failed');
+  });
+});
 
 /*
 //Insert
