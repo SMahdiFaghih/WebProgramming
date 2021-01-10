@@ -221,6 +221,66 @@ ParseApp.post("/post/update", (request, response) => {
   });
 });
 
+ParseApp.post("/post/delete", (request, response) => {
+  console.log("POST /post/delete");
+  const token = request.headers.authorization;
+  var foundActiveUser = Object.keys(activeUsers).filter(function(key) 
+  {
+    return activeUsers[key].token == token;
+  });
+  if (foundActiveUser == null)
+  {
+    return response.status(401).json({ "message": "user is not valid"});
+  }
+  // i don't now how to get this
+  const postId;
+  //todo error 400 for id validation
+  const query = new Parse.Query(Posts);
+  query.equalTo("id", postId);
+  query.first().then((post) => {
+    if (post.get("created_by") != foundActiveUser[0].email)
+    {
+      return response.status(401).json({"message": "permission denied."});
+    }
+    post.destroy();
+    return response.status(204);
+  }, (error) => {
+    console.log(error);
+  });
+});
+
+ParseApp.post("/post/read", (request, response) => {
+  console.log("POST /post/read");
+  const token = request.headers.authorization;
+  var foundActiveUser = Object.keys(activeUsers).filter(function(key) 
+  {
+    return activeUsers[key].token == token;
+  });
+  if (foundActiveUser == null)
+  {
+    return response.status(401).json({ "message": "user is not valid"});
+  }
+  // i don't now how to get this
+  const postId;
+  //todo error 400 for id validation
+  const query = new Parse.Query(Posts);
+  query.equalTo("id", postId);
+  query.first().then((post) => {
+    if (post == null)
+    {
+      query = new Parse.Query(Posts);
+      query.find().then((posts) => {
+        return response.status(204).json({ "posts": posts});
+      }, (error) => {
+        console.log(error);
+      });
+    }
+    return response.status(204).json({ "post": post});
+  }, (error) => {
+    console.log(error);
+  });
+});
+
 /*
 //Insert
 const GameScore = Parse.Object.extend("Test");
