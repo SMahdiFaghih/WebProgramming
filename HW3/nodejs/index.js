@@ -167,6 +167,7 @@ ParseApp.post("/post/create", (request, response) => {
   const Post = Parse.Object.extend("Posts");
   const newPost = new Post();
   newPost.save({
+    user: foundActiveUser[0].email,
     title: title,
     content: content
   })
