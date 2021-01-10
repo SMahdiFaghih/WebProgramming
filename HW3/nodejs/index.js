@@ -39,6 +39,57 @@ Parse.initialize("myAppId");
 Parse.serverURL = 'http://localhost:1337/parse'
 
 
+ParseApp.post("/signin", (request, response) => {
+  console.log("POST /signin");
+  const email = request.body.email;
+  const password = request.body.password;
+  if (!validateEmail(email))
+  {
+    return response.status(400).json({ "message": "filed `email` is not valid"});
+  }
+  if (Object.keys(request.body).length > 2)
+  {
+    return response.status(400).json({ "message": "Request Length should be 2"});
+  }
+  const query = new Parse.Query(Users);
+  query.equalTo("email", email);
+  query.limit(1);
+  const results = await query.find();
+  if (results.length == 0 || results[0].get("password" != password))
+  {
+    return response.status(401).json({ "message": "wrong email or password."});
+  }
+  var token = makeToken(64);
+  results[0].set("token", token);
+  results[0].save();
+  return response.status(200).json({ "token": token});
+});
+
+ParseApp.get("/signin", (req, response) => {
+  return response.status(405).json({ "message": "Only `Post` Method is Valid"});
+});
+
+function validateEmail(email)
+{
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(String(email).toLowerCase());
+}
+
+function makeToken(length) 
+{
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) 
+  {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
+
+
 //Insert
 const GameScore = Parse.Object.extend("Test");
 const gameScore = new GameScore();
