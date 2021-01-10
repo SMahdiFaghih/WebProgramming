@@ -164,17 +164,60 @@ ParseApp.post("/post/create", (request, response) => {
   {
     return response.status(400).json({"message": "Request Length should be 2"});
   }
+  // i don't now how to set this id
+  id = 1;
   const Post = Parse.Object.extend("Posts");
   const newPost = new Post();
   newPost.save({
-    user: foundActiveUser[0].email,
+    id: id,
     title: title,
-    content: content
+    content: content,
+    created_by: foundActiveUser[0].email
   })
   .then(() => {
-    return response.status(201).json({"message": "user has been created."});
+    return response.status(201).json({"id": id});
   }, () => {
     console.log('create post failed');
+  });
+});
+
+ParseApp.post("/post/update", (request, response) => {
+  console.log("POST /post/update");
+  const token = request.headers.authorization;
+  var foundActiveUser = Object.keys(activeUsers).filter(function(key) 
+  {
+    return activeUsers[key].token == token;
+  });
+  if (foundActiveUser == null)
+  {
+    return response.status(401).json({ "message": "user is not valid"});
+  }
+  const title = request.body.title;
+  const content = request.body.content;
+  if (title == null)
+  {
+    return response.status(400).json({ "message": "filed `title` is not valid"});
+  }
+  if (Object.keys(request.body).length > 2)
+  {
+    return response.status(400).json({"message": "Request Length should be 2"});
+  }
+  // i don't now how to get this
+  const postId;
+  //todo error 400 for id validation
+  const query = new Parse.Query(Posts);
+  query.equalTo("id", postId);
+  query.first().then((post) => {
+    if (post.get("created_by") != foundActiveUser[0].email)
+    {
+      return response.status(401).json({"message": "permission denied."});
+    }
+    post.set("title", title);
+    post.set("content", content);
+    post.save();
+    return response.status(204);
+  }, (error) => {
+    console.log(error);
   });
 });
 
