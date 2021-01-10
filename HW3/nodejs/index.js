@@ -5,7 +5,7 @@ var ParseApp = express();
 var Parse = require('parse/node');
 
 var api = new ParseServer({
-  databaseURI: 'mongodb+srv://<Username>:<Password>@cluster0.a8oee.mongodb.net/<dbname>?retryWrites=true&w=majority',
+  databaseURI: 'mongodb+srv://Mahdi:<wQ8xS85yXGqLhD7r>@cluster0.a8oee.mongodb.net/<dbname>?retryWrites=true&w=majority',
   //databaseURI: 'mongodb://localhost:27017/web', // Connection string for your MongoDB database
   //cloud: './cloud/main.js', // Path to your Cloud Code
   appId: 'myAppId',
@@ -203,7 +203,7 @@ ParseApp.post("/post/update", (request, response) => {
     return response.status(400).json({"message": "Request Length should be 2"});
   }
   // i don't now how to get this
-  const postId;
+  const postId = 0;
   //todo error 400 for id validation
   const query = new Parse.Query(Posts);
   query.equalTo("id", postId);
@@ -233,7 +233,7 @@ ParseApp.post("/post/delete", (request, response) => {
     return response.status(401).json({ "message": "user is not valid"});
   }
   // i don't now how to get this
-  const postId;
+  const postId = 0;
   //todo error 400 for id validation
   const query = new Parse.Query(Posts);
   query.equalTo("id", postId);
@@ -261,7 +261,7 @@ ParseApp.post("/post/read", (request, response) => {
     return response.status(401).json({ "message": "user is not valid"});
   }
   // i don't now how to get this
-  const postId;
+  const postId = 0;
   //todo error 400 for id validation
   const query = new Parse.Query(Posts);
   query.equalTo("id", postId);
