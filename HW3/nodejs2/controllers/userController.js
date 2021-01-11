@@ -3,6 +3,7 @@ const {
 } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const AppError = require('../utils/appError');
 const base = require('./baseController');
 
 exports.deleteMe = async (req, res, next) => {
