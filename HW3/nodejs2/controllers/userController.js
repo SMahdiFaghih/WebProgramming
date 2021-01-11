@@ -41,7 +41,7 @@ exports.getUser = async (req, res, next) => {
             return next(new AppError(500, 'fail', 'User not found'), req, res, next);
         }
         const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-        if (user._id !== decode.id)
+        if (String(user._id)!== String(decode.id))
         {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
