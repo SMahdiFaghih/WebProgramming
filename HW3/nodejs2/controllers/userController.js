@@ -25,7 +25,7 @@ exports.error = (req, res, next) => {
 exports.getUser = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id).catch(error=>{});;
-        if (!uesr) {
+        if (!user) {
             return next(new AppError(400, 'fail', 'url id is not valid'), req, res, next);
         }
         let token;
