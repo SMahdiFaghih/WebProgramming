@@ -10,3 +10,7 @@ module.exports = (err, req, res, next) => {
     });
 
 };
+
+exports.error = (req, res, next) => {
+    return next(new AppError(405, 'fail', 'Only `Post` Method is Valid'), req, res, next);
+};
