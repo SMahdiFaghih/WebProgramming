@@ -17,7 +17,7 @@ exports.deleteOne = Model => async (req, res, next) => {
         {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
-        const post = await Post.remove({
+        await Post.remove({
             id: req.params.id,
         });
         res.status(204).json({
