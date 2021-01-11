@@ -24,7 +24,7 @@ fetch(`${BASE_URL}/signup`, requestOptions)
   .then(result => JSON.parse(result))
   .then(data=>{
     saveToLS(data.token);
-    window.location = "/";
+    window.location = "/profile.html";
   })
   .catch(error => console.error('error', error));
 }
@@ -61,7 +61,7 @@ fetch(`${BASE_URL}/signin`, requestOptions)
     console.log(data.data.user);
     saveToLS('Web._.Token',data.token);
     saveToLS('Web._.UserId', data.data.user._id)
-    window.location = "/";
+    window.location = "/profile.html";
   })
   .catch(error => console.error('error', error));
 }
