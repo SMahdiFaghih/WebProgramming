@@ -16,7 +16,7 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>CoreUI Free Bootstrap Admin Template</title>
+    <title>HW3</title>
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -63,24 +63,7 @@
           <svg width="118" height="46" alt="CoreUI Logo">
             <use xlink:href="assets/brand/coreui.svg#full"></use>
           </svg></a>
-        <ul class="c-header-nav ml-auto mr-4">
-          <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <div class="c-avatar">
-                <svg class="c-icon mr-2">
-                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil-user"></use>
-                </svg>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right pt-0">
-              <a class="dropdown-item" href="login.html">
-                <svg class="c-icon mr-2">
-                  <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil"></use>
-                </svg>Sign In</a>
-              <a class="dropdown-item" href="register.html">
-                  <svg class="c-icon mr-2">
-                    <use xlink:href="node_modules/@coreui/icons/sprites/free.svg#cil"></use>
-                  </svg>Sign Up</a>
-            </div>
-          </li>
+        <ul id="header" class="c-header-nav ml-auto mr-4">
         </ul>
         <div class="c-subheader px-3">
           <ol class="breadcrumb border-0 m-0">
@@ -97,6 +80,7 @@
           <div>Web Programming &copy; SUT</div>
           <div class="ml-auto">Created By&nbsp;fatteme</div>
         </footer>
+        <div id="alertContainer"></div>
       </div>
     </div>
     <!-- CoreUI and necessary plugins-->
@@ -108,7 +92,6 @@
     <script src="node_modules/@coreui/chartjs/dist/js/coreui-chartjs.bundle.js"></script>
     <script src="node_modules/@coreui/utils/dist/coreui-utils.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/dashboard.js"></script>
-    <script>getAllPosts()</script>
+    <script src="js/timeline.js"></script>
   </body>
 </html>

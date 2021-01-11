@@ -5,11 +5,13 @@ function register(){
   let valid = true;
   payload = {}
   formInputs.forEach(i => {
-    console.log(i)
     payload[i.id] = i.value;
     if(!i.value) valid = false;
   });
-  if(!valid) return;
+  if(!valid){
+    showWarning('please fill all fields');
+    return;
+  }
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var raw = JSON.stringify(payload);
@@ -23,16 +25,15 @@ fetch(`${BASE_URL}/signup`, requestOptions)
   .then(response => response.text())
   .then(result => JSON.parse(result))
   .then(data=>{
-    saveToLS(data.token);
+    saveToLS('Web._.Token',data.token);
+    saveToLS('Web._.UserId', data.data.user._id);
     window.location = "/profile.html";
   })
-  .catch(error => console.error('error', error));
-}
-
-
-function routeTo(url){
-  if(!url) return;
-  window.location = url;
+  .catch(error => {
+    console.error('error', error)
+    showError('Server Error!' + error.message);
+  }
+  );
 }
 
 function login(){
@@ -40,11 +41,13 @@ function login(){
   let valid = true;
   payload = {}
   formInputs.forEach(i => {
-    console.log(i)
     payload[i.id] = i.value;
     if(!i.value) valid = false;
   });
-  if(!valid) return;
+  if(!valid){
+    showWarning('please fill all fields');
+    return;
+  }
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var raw = JSON.stringify(payload);
@@ -58,12 +61,15 @@ fetch(`${BASE_URL}/signin`, requestOptions)
   .then(response => response.text())
   .then(result => JSON.parse(result))
   .then(data=>{
-    console.log(data.data.user);
     saveToLS('Web._.Token',data.token);
-    saveToLS('Web._.UserId', data.data.user._id)
+    saveToLS('Web._.UserId', data.data.user._id);
     window.location = "/profile.html";
   })
-  .catch(error => console.error('error', error));
+  .catch(error => {
+    console.error('error', error)
+    showError('Server Error!' + error.message);
+  }
+  );
 }
 
 function saveToLS(key, value){
@@ -71,3 +77,31 @@ function saveToLS(key, value){
   const LS = window.localStorage;
   LS.setItem(key, value);
 }
+
+function routeTo(url){
+  if(!url) return;
+  window.location = url;
+}
+
+
+function showError(message){
+  const errorToast = document.createElement('div');
+  errorToast.innerHTML = `
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> ${message}
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>`;
+  document.getElementById('alertContainer').appendChild(errorToast);
+}
+
+
+function showWarning(message){
+  const errorToast = document.createElement('div');
+  errorToast.innerHTML = `
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Warning!</strong> ${message}
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>`;
+  document.getElementById('alertContainer').appendChild(errorToast);
+}
+

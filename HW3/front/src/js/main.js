@@ -263,5 +263,8 @@ const mainChart = new Chart(document.getElementById('main-chart'), {
 function logout(){
   const LS = window.localStorage;
   LS.removeItem('Web._.Token');
-  window.location = '/login.html';
+  LS.removeItem('Web._.UserId');
+  window.location = '/';
 }
+
+

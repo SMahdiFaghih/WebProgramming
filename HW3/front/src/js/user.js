@@ -2,6 +2,7 @@ const BASE_URL = "http://localhost:8000/api/admin";
 const LS = window.localStorage;
 let token = LS.getItem('Web._.Token');
 let userId = LS.getItem('Web._.UserId');
+
 function getUserInfo(){
   var myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
@@ -26,5 +27,19 @@ function getUserInfo(){
      </div>`;
      container.appendChild(div);
     })
-    .catch(error => console.log('error', error));
+    .catch(error => {
+      console.error('error', error);
+      showError('Server Error!' + error.message);
+  });
+}
+
+
+function showError(message){
+  const errorToast = document.createElement('div');
+  errorToast.innerHTML = `
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> Server Error! ${message}
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>`;
+  document.getElementById('alertContainer').appendChild(errorToast);
 }

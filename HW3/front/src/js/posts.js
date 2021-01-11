@@ -3,16 +3,17 @@ const LS = window.localStorage;
 let userId = LS.getItem('Web._.Token');
 
 function createPost(){
-  console.log('create post')
   const formInputs = [].slice.call(document.getElementsByClassName('form-control'));
   let valid = true;
   payload = {}
   formInputs.forEach(i => {
-    console.log(i)
     payload[i.id] = i.value;
     if(!i.value) valid = false;
   });
-  if(!valid) return;
+  if(!valid){
+    showWarning('please fill all fields');
+    return;
+  }
   var myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${userId}`);
   myHeaders.append("Content-Type", "application/json");
@@ -27,13 +28,16 @@ function createPost(){
     .then(response => response.text())
     .then(result => JSON.parse(result))
     .then(data => {window.location = "/posts.html"})
-    .catch(error => console.log('error', error));
+    .catch(error => {
+      console.error('error', error);
+      showError('Server Error!' + error.message);
+    }
+    );
 }
 
 
 
 function getUserPosts(){
-  console.log('hey im getting user posts')
   var myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${userId}`);
   myHeaders.append("Content-Type", "application/json");
@@ -108,16 +112,26 @@ function getUserPosts(){
         return userPosts;
       })
     })
-    .catch(error => console.log('error', error));
+    .catch(error => {
+      console.error('error', error);
+      showError('Server Error!' + error.message);
+    }
+    );
 }
 
 
 
 function editPost(id){
-  console.log('im editing post');
-  if(!id) return;
+  if(!id){
+    showWarning('something happened! please reload page')
+    return;
+  }
   const title = document.getElementById(`editPost${id}Title`).value;
   const content = document.getElementById(`editPost${id}Content`).value;
+  if(!title || !content){
+    showWarning('please fill all fields');
+    return;
+  }
   const payload = {title, content};
   var myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${userId}`);
@@ -134,8 +148,9 @@ function editPost(id){
     .then(result => JSON.parse(result))
     .then(data => location.reload())
     .catch(error => {
-      console.log('error', error)
-      location.reload()
+      console.log('error', error);
+      showError('Server Error!' + error.message)
+      location.reload();
     });
 
 }
@@ -155,7 +170,33 @@ function deletePost(id){
     .then(result => JSON.parse(result))
     .then(data => location.reload())
     .catch(error => {
-      console.log('error', error)
-      location.reload()
+      console.log('error', error);
+      showError('Server Error!' + error.message)
+      location.reload();
     });
 }
+
+
+
+
+function showError(message){
+  const errorToast = document.createElement('div');
+  errorToast.innerHTML = `
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>Error!</strong> Server Error! ${message}
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>`;
+  document.getElementById('alertContainer').appendChild(errorToast);
+}
+
+
+function showWarning(message){
+  const errorToast = document.createElement('div');
+  errorToast.innerHTML = `
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Warning!</strong> ${message}
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+  </div>`;
+  document.getElementById('alertContainer').appendChild(errorToast);
+}
+
