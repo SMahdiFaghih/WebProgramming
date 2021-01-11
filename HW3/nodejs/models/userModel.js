@@ -23,22 +23,6 @@ const userSchema = new mongoose.Schema({
         select: false
 
     },
-    passwordConfirm: {
-        type: String,
-        required: [true, 'Please fill your password confirm'],
-        validate: {
-            validator: function (el) {
-                // "this" works only on create and save 
-                return el === this.password;
-            },
-            message: 'Your password and confirmation password are not the same'
-        }
-    },
-    role: {
-        type: String,
-        enum: ['admin', 'teacher', 'student'],
-        default: 'student'
-    },
     active: {
         type: Boolean,
         default: true,

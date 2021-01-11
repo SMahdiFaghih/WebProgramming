@@ -1,2 +1,5 @@
 front/node_modules
 front/dist
+nodejs/node_modules
+nodejs/logs
+nodejs2/node_modules

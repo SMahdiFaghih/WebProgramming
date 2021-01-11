@@ -5,13 +5,12 @@ var ParseApp = express();
 var Parse = require('parse/node');
 
 var api = new ParseServer({
-  databaseURI: 'mongodb+srv://Mahdi:<wQ8xS85yXGqLhD7r>@cluster0.a8oee.mongodb.net/<dbname>?retryWrites=true&w=majority',
+  databaseURI: 'mongodb+srv://Mahdi:wQ8xS85yXGqLhD7r@cluster0.a8oee.mongodb.net/HW3?retryWrites=true&w=majority',
   //databaseURI: 'mongodb://localhost:27017/web', // Connection string for your MongoDB database
-  //cloud: './cloud/main.js', // Path to your Cloud Code
   appId: 'myAppId',
   masterKey: 'myMasterKey', // Keep this key secret!
   fileKey: 'optionalFileKey',
-  serverURL: 'http://localhost:1337/parse' // Don't forget to change to https if needed
+  serverURL: 'http://localhost:1337/parse'
 });
 
 // Serve the Parse API on the /parse URL prefix
@@ -40,99 +39,99 @@ Parse.serverURL = 'http://localhost:1337/parse'
 
 var activeUsers = []
 
-ParseApp.post("/signin", (request, response) => {
-  console.log("POST /signin");
-  const email = request.body.email;
-  const password = request.body.password;
-  if (!validateEmail(email))
-  {
-    return response.status(400).json({ "message": "filed `email` is not valid"});
-  }
-  if (Object.keys(request.body).length > 2)
-  {
-    return response.status(400).json({ "message": "Request Length should be 2"});
-  }
-  const query = new Parse.Query(Users);
-  query.equalTo("email", email);
-  query.limit(1);
-  query.find().then((results) => {
-    if (results.length == 0 || results[0].get("password" != password))
-    {
-      return response.status(401).json({ "message": "wrong email or password."});
-    }
-    var token = makeToken(64);
-    activeUsers.push({"email": email, "token":token});
-    return response.status(200).json({ "token": token});
-  }, () => {
-    console.log('find failed');
-  });
-});
+// ParseApp.post("/signin", (request, response) => {
+//   console.log("POST /signin");
+//   const email = request.body.email;
+//   const password = request.body.password;
+//   if (!validateEmail(email))
+//   {
+//     return response.status(400).json({ "message": "filed `email` is not valid"});
+//   }
+//   if (Object.keys(request.body).length > 2)
+//   {
+//     return response.status(400).json({ "message": "Request Length should be 2"});
+//   }
+//   const query = new Parse.Query(Users);
+//   query.equalTo("email", email);
+//   query.limit(1);
+//   query.find().then((results) => {
+//     if (results.length == 0 || results[0].get("password" != password))
+//     {
+//       return response.status(401).json({ "message": "wrong email or password."});
+//     }
+//     var token = makeToken(64);
+//     activeUsers.push({"email": email, "token":token});
+//     return response.status(200).json({ "token": token});
+//   }, () => {
+//     console.log('find failed');
+//   });
+// });
 
-ParseApp.get("/signin", (req, response) => {
-  return response.status(405).json({ "message": "Only `Post` Method is Valid"});
-});
+// ParseApp.get("/signin", (req, response) => {
+//   return response.status(405).json({ "message": "Only `Post` Method is Valid"});
+// });
 
-ParseApp.post("/signup", (request, response) => {
-  console.log("POST /signup");
-  const email = request.body.email;
-  const password = request.body.password;
-  if (!validateEmail(email))
-  {
-    return response.status(400).json({ "message": "filed `email` is not valid"});
-  }
-  if (Object.keys(request.body).length > 2)
-  {
-    return response.status(400).json({"message": "Request Length should be 2"});
-  }
-  if (password.length < 5)
-  {
-    return response.status(400).json({"message": "filed `password`.length should be gt 5"});
-  }
-  const query = new Parse.Query(Users);
-  query.equalTo("email", email);
-  query.limit(1);
-  query.find().then((results) => {
-    if (results.length == 0)
-    {
-      const User = Parse.Object.extend("Users");
-      const newUser = new User();
-      newUser.save({
-        email: email,
-        password: password
-      })
-      .then(() => {
-        return response.status(201).json({"message": "user has been created."});
-      }, () => {
-        console.log('signUp failed');
-      });
-    }
-    return response.status(409).json({"message": "email already exist."});
-  }, () => {
-    console.log('find failed');
-  });
-});
+// ParseApp.post("/signup", (request, response) => {
+//   console.log("POST /signup");
+//   const email = request.body.email;
+//   const password = request.body.password;
+//   if (!validateEmail(email))
+//   {
+//     return response.status(400).json({ "message": "filed `email` is not valid"});
+//   }
+//   if (Object.keys(request.body).length > 2)
+//   {
+//     return response.status(400).json({"message": "Request Length should be 2"});
+//   }
+//   if (password.length < 5)
+//   {
+//     return response.status(400).json({"message": "filed `password`.length should be gt 5"});
+//   }
+//   const query = new Parse.Query(Users);
+//   query.equalTo("email", email);
+//   query.limit(1);
+//   query.find().then((results) => {
+//     if (results.length == 0)
+//     {
+//       const User = Parse.Object.extend("Users");
+//       const newUser = new User();
+//       newUser.save({
+//         email: email,
+//         password: password
+//       })
+//       .then(() => {
+//         return response.status(201).json({"message": "user has been created."});
+//       }, () => {
+//         console.log('signUp failed');
+//       });
+//     }
+//     return response.status(409).json({"message": "email already exist."});
+//   }, () => {
+//     console.log('find failed');
+//   });
+// });
 
-ParseApp.get("/signup", (req, response) => {
-  return response.status(405).json({"message": "Only `Post` Method is Valid"});
-});
+// ParseApp.get("/signup", (req, response) => {
+//   return response.status(405).json({"message": "Only `Post` Method is Valid"});
+// });
 
-function validateEmail(email)
-{
-  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return regex.test(String(email).toLowerCase());
-}
+// function validateEmail(email)
+// {
+//   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//   return regex.test(String(email).toLowerCase());
+// }
 
-function makeToken(length) 
-{
-  var result           = '';
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) 
-  {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+// function makeToken(length) 
+// {
+//   var result           = '';
+//   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//   var charactersLength = characters.length;
+//   for ( var i = 0; i < length; i++ ) 
+//   {
+//     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//   }
+//   return result;
+// }
 
 ParseApp.get("/post", (req, response) => {
   const query = new Parse.Query(Posts);
