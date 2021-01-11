@@ -1,4 +1,5 @@
 const express = require('express');
+const errorController = require('../controllers/errorController');
 const router = express.Router();
 const postController = require('../controllers/postController');
 const authController = require('./../controllers/authController');
@@ -17,4 +18,8 @@ router.route('/post/crud/:id')
     .get(postController.getPostById);
 
 router.get('/user/crud/:id', userController.getUser);
+
+router.route('/signin').get(userController.error);
+router.route('/signup').get(userController.error);
+
 module.exports = router;
