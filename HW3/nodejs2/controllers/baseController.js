@@ -20,7 +20,7 @@ exports.deleteOne = Model => async (req, res, next) => {
         if (!doc_temp) {
             return next(new AppError(404, 'fail', 'url id is not valid'), req, res, next);
         }
-        if (doc_temp.userId !== decode.id)
+        if (String(doc_temp.userId) !== String(decode.id))
         {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
@@ -61,7 +61,7 @@ exports.updateOne = Model => async (req, res, next) => {
             return next(new AppError(500, 'fail', 'User not found'), req, res, next);
         }
         const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-        if (doc.userId !== decode.id)
+        if (String(doc.userId) !== String(decode.id))
         {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
