@@ -131,7 +131,18 @@ function makeToken(length)
   {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  return result;
+  var foundActiveUser = Object.keys(activeUsers).filter(function(key) 
+  {
+    return activeUsers[key].token == result;
+  });
+  if (foundActiveUser == null)
+  {
+    return result;
+  }
+  else
+  {
+    return makeToken(64);
+  }
 }
 
 ParseApp.get("/post", (req, response) => {
