@@ -5,6 +5,7 @@ const postController = require('./../controllers/postController');
 
 
 router.post('/signin', authController.login);
+router.get('/signin', authController.notSupported);
 router.post('/signup', authController.signup);
 router.get('/post', postController.getAllPosts);
 

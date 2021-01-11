@@ -16,7 +16,7 @@ const createToken = id => {
 
 exports.login = async (req, res, next) => {
     try {
-        if (Object.keys(req.body).length > 2)
+        if (Object.keys(req.body).length !== 2)
         {
             return next(new AppError(400, 'fail', 'Request Length should be 2'), req, res, next);
         }
@@ -51,13 +51,21 @@ exports.login = async (req, res, next) => {
     }
 };
 
+exports.notSupported = async (req, res, next) => {
+    try {
+        return next(new AppError(405, 'fail', 'only `post` method is valid' ), req, res, next);
+    } catch (err) {
+        next(err);
+    }
+};
+
 exports.signup = async (req, res, next) => {
     try {
-        if (Object.keys(req.body).length != 3)
+        if (Object.keys(req.body).length !== 3)
         {
             return next(new AppError(400, 'fail', 'Request Length should be 3'), req, res, next);
         }
-        if (!validateEmail(email))
+        if (!validateEmail(req.body.email))
         {
             return next(new AppError(400, 'fail', 'filed `email` is not valid'), req, res, next);
         }
@@ -65,10 +73,14 @@ exports.signup = async (req, res, next) => {
         {
             return next(new AppError(400, 'fail', 'filed `password`.length should be gt 5'), req, res, next);
         }
+        if (!req.body.name)
+        {
+            return next(new AppError(400, 'fail', 'filed `name` is required'), req, res, next);
+        }
         const existedUser = await User.find({
             email: req.body.email,
-        });
-        if (existedUser != null)
+        }).catch(e=>{});
+        if (existedUser.length > 0)
         {
             return next(new AppError(409, 'fail', 'email already exist.'), req, res, next);
         }
@@ -81,6 +93,7 @@ exports.signup = async (req, res, next) => {
         user.password = undefined;
         res.status(201).json({
             status: 'success',
+            message: 'user has been created',
             token,
             data: {
                 user
@@ -98,7 +111,7 @@ exports.protect = async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
         }
         if (!token) {
-            return next(new AppError(401, 'fail', 'You are not logged in! Please login in to continue'), req, res, next);
+            return next(new AppError(401, 'fail', 'User not found'), req, res, next);
         }
         const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
         const user = await User.findById(decode.id);

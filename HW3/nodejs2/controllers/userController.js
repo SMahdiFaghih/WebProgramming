@@ -22,8 +22,31 @@ exports.error = (req, res, next) => {
     return next(new AppError(405, 'fail', 'Only `Post` Method is Valid'), req, res, next);
 };
 
-exports.getAllUsers = base.getAll(User);
-exports.getUser = base.getOne(User);
+exports.getUser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id).catch(error=>{});;
+        if (!uesr) {
+            return next(new AppError(400, 'fail', 'url id is not valid'), req, res, next);
+        }
+        let token;
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+        if (!token) {
+            return next(new AppError(500, 'fail', 'User not found'), req, res, next);
+        }
+        const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        if (user._id !== decode.id)
+        {
+            return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
+        }
+        res.status(200).json({
+            uesr
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 // Don't update password on this 
 exports.updateUser = base.updateOne(User);

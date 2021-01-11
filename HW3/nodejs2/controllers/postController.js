@@ -1,12 +1,26 @@
+const AppError = require('../utils/appError');
+const APIFeatures = require('../utils/apiFeatures');
 const Post = require('../models/postModel');
-const User = require('../models/userModel');
 const base = require('./baseController');
 const {
     promisify
 } = require('util');
 const jwt = require('jsonwebtoken');
 
-exports.getAllPosts = base.getAll(Post);
+exports.getAllPosts = async (req, res, next) => {
+    try {
+        const features = new APIFeatures(Post.find(), req.query)
+            .sort()
+            .paginate();
+        const posts = await features.query;
+        res.status(200).json({
+            results: posts.length,
+            posts: posts
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 const id = 0;
 
@@ -20,7 +34,8 @@ exports.createPost = async (req, res, next) => {
             return next(new AppError(500, 'fail', 'User not found'), req, res, next);
         }
         const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-        if (Object.keys(req.body).length > 2)
+
+        if (Object.keys(req.body).length !== 2)
         {
             return next(new AppError(400, 'fail', 'Request Length should be 2'), req, res, next);
         }
@@ -28,19 +43,17 @@ exports.createPost = async (req, res, next) => {
         {
             return next(new AppError(400, 'fail', 'filed `title` is not valid'), req, res, next);
         }
-        id += 1;
+        if (!req.body.content)
+        {
+            return next(new AppError(400, 'fail', 'filed `content` is not valid'), req, res, next);
+        }
         const post = await Post.create({
-            id: id, 
             title: req.body.title,
             content: req.body.content,
             userId: decode.id,
         });
         res.status(201).json({
-            status: 'success',
-            token,
-            data: {
-                post
-            }
+            id: post._id,
         });
     } catch (err) {
         next(err);
@@ -50,4 +63,3 @@ exports.createPost = async (req, res, next) => {
 exports.updatePost = base.updateOne(Post);
 exports.deletePost = base.deleteOne(Post);
 exports.getPostById = base.getOne(Post);
-exports.getAllPosts = base.getAll(Post);

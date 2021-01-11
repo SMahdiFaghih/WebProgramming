@@ -1,29 +1,31 @@
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 const Post = require('../models/postModel');
+const {
+    promisify
+} = require('util');
+const jwt = require('jsonwebtoken');
 
 exports.deleteOne = Model => async (req, res, next) => {
     try {
-        const doc = await Model.findByIdAndDelete(req.params.id);
-        console.log(doc)
-        if (!doc) {
-            return next(new AppError(404, 'fail', 'No document found with that id'), req, res, next);
+        let token;
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
         }
-        const post = await Post.find({
-            id: req.params.id,
-        });
-        const userId = 0; //i don't know how to find it
-        if (post.get("userId") != userId)
+        if (!token) {
+            return next(new AppError(500, 'fail', 'User not found'), req, res, next);
+        }
+        const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        const doc_temp = await Model.findById(req.params.id).catch(error=>{});
+        if (!doc_temp) {
+            return next(new AppError(404, 'fail', 'url id is not valid'), req, res, next);
+        }
+        if (doc_temp.userId !== decode.id)
         {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
-        await Post.remove({
-            id: req.params.id,
-        });
-        res.status(204).json({
-            status: 'success',
-            data: null
-        });
+        const doc = await Model.findByIdAndDelete(req.params.id).catch(error=>{});
+        res.status(204).json();
     } catch (error) {
         next(error);
     }
@@ -31,37 +33,39 @@ exports.deleteOne = Model => async (req, res, next) => {
 
 exports.updateOne = Model => async (req, res, next) => {
     try {
-        const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
-        if (Object.keys(req.body).length > 2)
+        if (Object.keys(req.body).length !== 2)
         {
             return next(new AppError(400, 'fail', 'Request Length should be 2'), req, res, next);
         }
         if (!req.body.title)
         {
-            return next(new AppError(400, 'fail', 'filed `title` is not valid'), req, res, next);
+            return next(new AppError(400, 'fail', 'field `title` is not valid'), req, res, next);
         }
-
+        if (!req.body.content)
+        {
+            return next(new AppError(400, 'fail', 'field `content` is not valid'), req, res, next);
+        }
+        const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        }).catch(error=>{});
         if (!doc) 
         {
             return next(new AppError(400, 'fail', 'url id is not valid'), req, res, next);
         }
-        const post = await Post.find({
-            id: req.params.id,
-        });
-        const userId = 0; //i don't know how to find it
-        if (post.get("userId") != userId)
+        let token;
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+        if (!token) {
+            return next(new AppError(500, 'fail', 'User not found'), req, res, next);
+        }
+        const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        if (doc.userId !== decode.id)
         {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
-        res.status(204).json({
-            status: 'success',
-            data: {
-                doc
-            }
-        });
+        res.status(204).json();
 
     } catch (error) {
         next(error);
@@ -86,17 +90,12 @@ exports.createOne = Model => async (req, res, next) => {
 
 exports.getOne = Model => async (req, res, next) => {
     try {
-        const doc = await Model.findById(req.params.id);
-        console.log(doc)
-        if (!doc) {
-            return next(new AppError(404, 'fail', 'No document found with that id'), req, res, next);
+        const post = await Model.findById(req.params.id).catch(error=>{});;
+        if (!post) {
+            return next(new AppError(400, 'fail', 'url id is not valid'), req, res, next);
         }
-
         res.status(200).json({
-            status: 'success',
-            data: {
-                doc
-            }
+            post
         });
     } catch (error) {
         next(error);
@@ -108,15 +107,19 @@ exports.getAll = Model => async (req, res, next) => {
         const features = new APIFeatures(Model.find(), req.query)
             .sort()
             .paginate();
-
-        const doc = await features.query;
-
+        const posts = await features.query;
+        let token;
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+        if (!token) {
+            return next(new AppError(500, 'fail', 'User not found'), req, res, next);
+        }
+        const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        const postsByUser = posts.filter(p=>p.userId === decode.id);
         res.status(200).json({
-            status: 'success',
-            results: doc.length,
-            data: {
-                data: doc
-            }
+            results: postsByUser.length,
+            posts: postsByUser
         });
 
     } catch (error) {
