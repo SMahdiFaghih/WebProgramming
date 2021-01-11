@@ -121,17 +121,28 @@ var activeUsers = []
 //   return regex.test(String(email).toLowerCase());
 // }
 
-// function makeToken(length) 
-// {
-//   var result           = '';
-//   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   var charactersLength = characters.length;
-//   for ( var i = 0; i < length; i++ ) 
-//   {
-//     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-//   }
-//   return result;
-// }
+function makeToken(length) 
+{
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) 
+  {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  var foundActiveUser = Object.keys(activeUsers).filter(function(key) 
+  {
+    return activeUsers[key].token == result;
+  });
+  if (foundActiveUser == null)
+  {
+    return result;
+  }
+  else
+  {
+    return makeToken(64);
+  }
+}
 
 ParseApp.get("/post", (req, response) => {
   const query = new Parse.Query(Posts);
