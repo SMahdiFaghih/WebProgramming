@@ -41,7 +41,7 @@ exports.getUser = async (req, res, next) => {
             return next(new AppError(401, 'fail', 'permission denied.'), req, res, next);
         }
         res.status(200).json({
-            uesr
+            user
         });
     } catch (error) {
         next(error);

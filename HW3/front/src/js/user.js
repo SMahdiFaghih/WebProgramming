@@ -21,9 +21,9 @@ function getUserInfo(){
       div.innerHTML = `
       <div class="container-fluid">
       <strong>Name</strong>
-      <div class="ml-3">${data.data.doc.name}</div>
+      <div class="ml-3">${data.user.name}</div>
       <strong>Email</strong>
-      <div class="ml-3">${data.data.doc.email}</div>
+      <div class="ml-3">${data.user.email}</div>
      </div>`;
      container.appendChild(div);
     })

@@ -50,7 +50,7 @@ function getUserPosts(){
     .then(response => response.text())
     .then(result => JSON.parse(result))
     .then(userPosts =>{
-      userPosts.data.data.forEach(post => {
+      userPosts.posts.forEach(post => {
         const postContainer = document.getElementById('postsContainer');
         if(!postContainer) return;
         const postHTML = document.createElement('div');
