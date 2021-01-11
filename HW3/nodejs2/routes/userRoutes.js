@@ -19,7 +19,7 @@ router.route('/post/crud/:id')
 
 router.get('/user/crud/:id', userController.getUser);
 
-router.get('/signin', errorController.error);
-router.get('/signup', errorController.error);
+router.route('/signin').get(userController.error);
+router.route('/signup').get(userController.error);
 
 module.exports = router;
