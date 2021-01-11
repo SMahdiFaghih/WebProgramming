@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 
 exports.getAllPosts = base.getAll(Post);
 
+const id = 0;
+
 exports.createPost = async (req, res, next) => {
     try {
         let token;
@@ -18,7 +20,17 @@ exports.createPost = async (req, res, next) => {
             return next(new AppError(500, 'fail', 'User not found'), req, res, next);
         }
         const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        if (Object.keys(req.body).length > 2)
+        {
+            return next(new AppError(400, 'fail', 'Request Length should be 2'), req, res, next);
+        }
+        if (!req.body.title)
+        {
+            return next(new AppError(400, 'fail', 'filed `title` is not valid'), req, res, next);
+        }
+        id += 1;
         const post = await Post.create({
+            id: id, 
             title: req.body.title,
             content: req.body.content,
             userId: decode.id,

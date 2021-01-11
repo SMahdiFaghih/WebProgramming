@@ -16,7 +16,7 @@ const createToken = id => {
 
 exports.login = async (req, res, next) => {
     try {
-        if (Object.keys(request.body).length > 2)
+        if (Object.keys(req.body).length > 2)
         {
             return next(new AppError(400, 'fail', 'Request Length should be 2'), req, res, next);
         }
@@ -53,7 +53,7 @@ exports.login = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
     try {
-        if (Object.keys(request.body).length != 3)
+        if (Object.keys(req.body).length != 3)
         {
             return next(new AppError(400, 'fail', 'Request Length should be 3'), req, res, next);
         }
