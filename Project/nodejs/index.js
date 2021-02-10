@@ -25,9 +25,67 @@ var successfulRequestResponse = "admit";
 var failedRequestResponse = "reject";
 
 createDatabase();
-signInStudent("s@gmail.com", 12345);
-signInStudent("smf@gmail.com", 12345);
-signInStudent("smf1380@gmail.com", 12345);
+editStudent("s@gmail.com", 2020, "mohammad");
+
+function editStudent(email, newPassword, newUsername)
+{
+    con.query('SELECT * FROM student WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        if (result.length == 0)
+        {
+            console.log("email or password is incorrect for student");
+            return failedRequestResponse;
+        }
+        con.query('UPDATE student SET password = ?, username = ?', [newPassword, newUsername], function (err, result) 
+        {
+            if (err)
+            {
+                console.log(err);
+                return failedRequestResponse;
+            } 
+            else
+            {
+                console.log("student info edited");
+                return successfulRequestResponse;
+            }
+        });
+    });
+}
+
+function editLecturer(email, newPassword, newUsername)
+{
+    con.query('SELECT * FROM lecturer WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        if (result.length == 0)
+        {
+            console.log("email or password is incorrect for lecturer");
+            return failedRequestResponse;
+        }
+        con.query('UPDATE lecturer SET password = ?, username = ?', [newPassword, newUsername], function (err, result) 
+        {
+            if (err)
+            {
+                console.log(err);
+                return failedRequestResponse;
+            } 
+            else
+            {
+                console.log("lecturer info edited");
+                return successfulRequestResponse;
+            }
+        });
+    });
+}
 
 function signInStudent(email, password)
 {
