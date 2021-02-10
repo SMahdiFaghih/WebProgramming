@@ -19,14 +19,14 @@ const limiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     message: 'Too Many Request from this IP, please try again in an hour'
 });
-app.use('/', limiter);
+app.use('', limiter);
 app.use(express.json({
     limit: '15kb'
 }));
 app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
-app.use('/', publicRoutes);
+app.use('', publicRoutes);
 app.use('/admin', userRoutes);
 app.use('*', (req, res, next) => {
     const err = new AppError(404, 'fail', 'undefined route');
