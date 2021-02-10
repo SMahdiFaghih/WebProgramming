@@ -7,6 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const jwt = require("jsonwebtoken");
+const accessTokenSecret = 'youraccesstokensecret';
+
 const port = 8080;
 
 LecturerEmails = ["aabaam@gmail.com", "mrbahrami@gmail.com"]
@@ -22,7 +25,51 @@ var successfulRequestResponse = "admit";
 var failedRequestResponse = "reject";
 
 createDatabase();
-signUpLecturer("aabaam@gmail.com", 12345, "mahdi");
+signInStudent("s@gmail.com", 12345);
+signInStudent("smf@gmail.com", 12345);
+signInStudent("smf1380@gmail.com", 12345);
+
+function signInStudent(email, password)
+{
+    con.query('SELECT * FROM student WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        if (result.length == 0)
+        {
+            console.log("email or password is incorrect for student");
+            return failedRequestResponse;
+        }
+        console.log("student signedIn");
+        const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
+        console.log(accessToken);
+        return successfulRequestResponse;
+    });
+}
+
+function signInLecturer(email, password)
+{
+    con.query('SELECT * FROM lecturer WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        if (result.length == 0)
+        {
+            console.log("email or password is incorrect for lecturer");
+            return failedRequestResponse;
+        }
+        console.log("lecturer signedIn");
+        const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
+        console.log(accessToken);
+        return successfulRequestResponse;
+    });
+}
 
 function signUpStudent(email, password, username)
 {
