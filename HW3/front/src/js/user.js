@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/admin";
+const BASE_URL = "http://192.168.1.103/api/admin";
 const LS = window.localStorage;
 let token = LS.getItem('Web._.Token');
 let userId = LS.getItem('Web._.UserId');
