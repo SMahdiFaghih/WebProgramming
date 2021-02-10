@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://localhost:8080";
 
 function register(){
   const formInputs = [].slice.call(document.getElementsByClassName('form-control'));

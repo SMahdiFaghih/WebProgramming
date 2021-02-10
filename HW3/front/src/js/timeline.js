@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "http://localhost:8080";
 const LS = window.localStorage;
 const isLoggedIn = LS.getItem('Web._.Token') !== null;
 initHeader();
