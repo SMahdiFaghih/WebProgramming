@@ -47,19 +47,3 @@ function closeError() {
     $('#errorModal').modal('hide');
 }
 
-function sendRequest(type, url, payload) {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-        method: type,
-        headers: myHeaders,
-        body: JSON.stringify(payload),
-        redirect: 'follow'
-    };
-    return fetch(url, requestOptions)
-        .then(response => response.text())
-        .then(result => JSON.parse(result))
-        .catch(error => {
-            showError(error);
-        });
-}
