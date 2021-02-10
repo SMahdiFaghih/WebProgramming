@@ -264,7 +264,7 @@ function logout(){
   const LS = window.localStorage;
   LS.removeItem('Web._.Token');
   LS.removeItem('Web._.UserId');
-  window.location = '/';
+  window.location = './';
 }
 
 
