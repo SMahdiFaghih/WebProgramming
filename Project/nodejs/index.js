@@ -18,6 +18,9 @@ var con = mysql.createConnection({
     database: "web_project"
 });
 
+var successfulRequestResponse = "admit";
+var failedRequestResponse = "reject";
+
 createDatabase();
 signUpLecturer("aabaam@gmail.com", 12345, "mahdi");
 
@@ -28,22 +31,24 @@ function signUpStudent(email, password, username)
         if (err)
         {
             console.log(err);
-            return;
+            return failedRequestResponse;
         } 
         if (result.length != 0)
         {
             console.log("student exists with this email");
-            return;
+            return failedRequestResponse;
         }
         con.query('INSERT INTO student SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
         {
             if (err)
             {
                 console.log(err);
+                return failedRequestResponse;
             } 
             else
             {
-                console.log("1 record inserted");
+                console.log("1 record inserted to student table");
+                return successfulRequestResponse;
             }
         });
     });
@@ -54,29 +59,31 @@ function signUpLecturer(email, password, username)
     if (!LecturerEmails.includes(email))
     {
         console.log("lecturer email not existed at all!");
-        return;
+        return failedRequestResponse;
     }
     con.query('SELECT * FROM lecturer WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
     {
         if (err)
         {
             console.log(err);
-            return;
+            return failedRequestResponse;
         } 
         if (result.length != 0)
         {
             console.log("lecturer exists with this email");
-            return;
+            return failedRequestResponse;
         }
         con.query('INSERT INTO lecturer SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
         {
             if (err)
             {
                 console.log(err);
+                return failedRequestResponse;
             } 
             else
             {
-                console.log("1 record inserted");
+                console.log("1 record inserted to lecturer table");
+                return successfulRequestResponse;
             }
         });
     });
