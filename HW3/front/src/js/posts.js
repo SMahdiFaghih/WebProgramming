@@ -27,7 +27,7 @@ function createPost(){
   fetch(`${BASE_URL}/post/crud`, requestOptions)
     .then(response => response.text())
     .then(result => JSON.parse(result))
-    .then(data => {window.location = "/posts.html"})
+    .then(data => {window.location = "./posts.html"})
     .catch(error => {
       console.error('error', error);
       showError('Server Error!' + error.message);
