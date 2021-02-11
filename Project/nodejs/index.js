@@ -1,5 +1,4 @@
 const http = require("http");
-const fs = require('fs');
 const express = require("express");
 const cors = require("cors");
 const mysql = require('mysql');
@@ -10,7 +9,7 @@ app.use(express.json());
 const jwt = require("jsonwebtoken");
 const accessTokenSecret = 'youraccesstokensecret';
 
-const port = 8080;
+const port = 3000;
 
 LecturerEmails = ["aabaam@gmail.com", "mrbahrami@gmail.com"]
 
@@ -21,11 +20,77 @@ var con = mysql.createConnection({
     database: "web_project"
 });
 
-var successfulRequestResponse = "admit";
-var failedRequestResponse = "reject";
+var successfulRequestResponse = "OK";
+var failedRequestResponse = "Error";
 
 createDatabase();
-editStudent("s@gmail.com", 2020, "mohammad");
+getLecturerForms("aabaam@gmail.com");
+
+app.post("/signup", (request, response) => {
+    console.log("POST /signup");
+    const email = request.body.email;
+    const password = request.body.password;
+    const username = request.body.username;
+    //todo check to prevent invalid email
+    const role = request.body.role;
+    if (role == "student")
+    {
+        var res = signUpStudent(email, password, username);
+        response.json({ "status": res });
+    }
+    else if (role == "lecturer")
+    {
+        var res = signUpLecturer(email, password, username);
+        response.json({ "status": res });
+    }
+    else
+    {
+        console.log("role is invalid");
+        return response.status(400).end('role is invalid');
+    }
+});
+
+function getLecturerForms(lecturerEmail)
+{
+    con.query('SELECT * FROM form WHERE lecturer_email = ?', [lecturerEmail], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log(result);
+        return result;
+    });
+}
+
+function getStudentForms(studentEmail)
+{
+    con.query('SELECT * FROM filled_forms JOIN form ON form.form_id = filled_forms.form_id WHERE student_email = ?', [studentEmail], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log(result);
+        return result;
+    });
+}
+
+function getAllForms()
+{
+    con.query('SELECT * FROM form WHERE status = "Open"', function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log(result);
+        return result;
+    });
+}
 
 function editStudent(email, newPassword, newUsername)
 {
