@@ -249,7 +249,7 @@ function createDatabase()
                     console.log("Table form created");
                 } 
             });
-            con.query("CREATE TABLE IF NOT EXISTS form_fields (form_id INT NOT NULL, description VARCHAR(128) NOT NULL, required TINYINT(1) NOT NULL, type ENUM ('TextField' , 'CheckList') NOT NULL, checklist_options VARCHAR(256), PRIMARY KEY (form_id, description), FOREIGN KEY (form_id) references form (form_id) on delete cascade on update cascade)", function(err)
+            con.query("CREATE TABLE IF NOT EXISTS form_fields (form_id INT NOT NULL, field_name VARCHAR(128) NOT NULL, required TINYINT(1) NOT NULL, type ENUM ('TextField' , 'CheckList') NOT NULL, checklist_options VARCHAR(256), PRIMARY KEY (form_id, field_name), FOREIGN KEY (form_id) references form (form_id) on delete cascade on update cascade)", function(err)
             {
                 if (err)
                 {
@@ -271,7 +271,7 @@ function createDatabase()
                     console.log("Table filled_forms created");
                 } 
             });
-            con.query("CREATE TABLE IF NOT EXISTS filled_forms_data (form_id INT NOT NULL, student_email VARCHAR(128) NOT NULL, field_description VARCHAR(128) NOT NULL, data VARCHAR(512), PRIMARY KEY (form_id, student_email, field_description), FOREIGN KEY (student_email) references student (email) on delete cascade on update cascade, FOREIGN KEY (form_id, field_description) references form_fields (form_id, description) on delete cascade on update cascade)", function(err)
+            con.query("CREATE TABLE IF NOT EXISTS filled_forms_data (form_id INT NOT NULL, student_email VARCHAR(128) NOT NULL, field_name VARCHAR(128) NOT NULL, data VARCHAR(512), PRIMARY KEY (form_id, student_email, field_name), FOREIGN KEY (student_email) references student (email) on delete cascade on update cascade, FOREIGN KEY (form_id, field_name) references form_fields (form_id, field_name) on delete cascade on update cascade)", function(err)
             {
                 if (err)
                 {
