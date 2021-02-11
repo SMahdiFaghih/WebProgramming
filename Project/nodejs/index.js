@@ -50,6 +50,37 @@ app.post("/signup", (request, response) => {
     }
 });
 
+function createForm(lecturer_email, title, description, fields)
+{
+    var form_id;
+    con.query('INSERT INTO form SET lecturer_email = ?, title = ?, description = ?, status = "Open"', [lecturer_email, title, description], function (err, result) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        else
+        {
+            console.log("1 record inserted to form table");
+            form_id = result.insertId;
+            con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, item.field_name, item.required, item.type, item.checklist_options])], function (err, result) 
+            {
+                if (err)
+                {
+                    console.log(err);
+                    return failedRequestResponse;
+                } 
+                else
+                {
+                    console.log(fields.length + " records inserted to form_fileds table");
+                    return successfulRequestResponse;
+                }
+            });
+        }
+    });   
+}
+
 function searchForms(content)
 {
     con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + content + "%", "%" + content + "%"], function (err, result, fields) 
