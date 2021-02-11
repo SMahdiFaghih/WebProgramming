@@ -41,7 +41,7 @@ function editStudent(email, newPassword, newUsername)
             console.log("email or password is incorrect for student");
             return failedRequestResponse;
         }
-        con.query('UPDATE student SET password = ?, username = ?', [newPassword, newUsername], function (err, result) 
+        con.query('UPDATE student SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
         {
             if (err)
             {
@@ -71,7 +71,7 @@ function editLecturer(email, newPassword, newUsername)
             console.log("email or password is incorrect for lecturer");
             return failedRequestResponse;
         }
-        con.query('UPDATE lecturer SET password = ?, username = ?', [newPassword, newUsername], function (err, result) 
+        con.query('UPDATE lecturer SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
         {
             if (err)
             {
