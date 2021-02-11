@@ -25,7 +25,7 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
-editForm(27, "s@gmail.com", "Accepted");
+getFormData(27, "s@gmail.com");
 
 app.post("/signup", (request, response) => {
     console.log("POST /signup");
@@ -51,6 +51,20 @@ app.post("/signup", (request, response) => {
     }
 });
 
+function getFormData(form_id, student_email)
+{
+    con.query('SELECT * FROM filled_forms_data WHERE student_email = ? AND form_id = ?', [student_email, form_id], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log(result);
+        return result;
+    });
+}
+
 function resolveForm(lecturer_email, student_email, form_id, result)
 {
     con.query('UPDATE filled_forms JOIN form ON form.form_id = filled_forms.form_id SET result = ? WHERE filled_forms.form_id = ? AND student_email = ? AND lecturer_email = ?', [result, form_id, student_email, lecturer_email], function (err, result, fields) 
@@ -60,7 +74,7 @@ function resolveForm(lecturer_email, student_email, form_id, result)
             console.log(err);
             return failedRequestResponse;
         } 
-        console.log("1 form answered");
+        console.log("1 form resolved");
         return successfulRequestResponse;
     });
 }
