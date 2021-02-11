@@ -24,7 +24,7 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
-getLecturerForms("aabaam@gmail.com");
+closeForm("aabaam@gmail.com", 12);
 
 app.post("/signup", (request, response) => {
     console.log("POST /signup");
@@ -50,6 +50,20 @@ app.post("/signup", (request, response) => {
     }
 });
 
+function closeForm(lecturer_email, form_id)
+{
+    con.query('UPDATE form SET status = "Closed" WHERE form_id = ? AND lecturer_email = ?', [form_id, lecturer_email], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log("1 form Closed");
+        return successfulRequestResponse;
+    });   
+}
+
 function createForm(lecturer_email, title, description, fields)
 {
     var form_id;
@@ -60,24 +74,18 @@ function createForm(lecturer_email, title, description, fields)
             console.log(err);
             return failedRequestResponse;
         } 
-        else
+        console.log("1 record inserted to form table");
+        form_id = result.insertId;
+        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, item.field_name, item.required, item.type, item.checklist_options])], function (err, result) 
         {
-            console.log("1 record inserted to form table");
-            form_id = result.insertId;
-            con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, item.field_name, item.required, item.type, item.checklist_options])], function (err, result) 
+            if (err)
             {
-                if (err)
-                {
-                    console.log(err);
-                    return failedRequestResponse;
-                } 
-                else
-                {
-                    console.log(fields.length + " records inserted to form_fileds table");
-                    return successfulRequestResponse;
-                }
-            });
-        }
+                console.log(err);
+                return failedRequestResponse;
+            } 
+            console.log(fields.length + " records inserted to form_fileds table");
+            return successfulRequestResponse;
+        });            
     });   
 }
 
@@ -158,11 +166,8 @@ function editStudent(email, newPassword, newUsername)
                 console.log(err);
                 return failedRequestResponse;
             } 
-            else
-            {
-                console.log("student info edited");
-                return successfulRequestResponse;
-            }
+            console.log("student info edited");
+            return successfulRequestResponse;
         });
     });
 }
@@ -188,11 +193,8 @@ function editLecturer(email, newPassword, newUsername)
                 console.log(err);
                 return failedRequestResponse;
             } 
-            else
-            {
-                console.log("lecturer info edited");
-                return successfulRequestResponse;
-            }
+            console.log("lecturer info edited");
+            return successfulRequestResponse;
         });
     });
 }
@@ -260,11 +262,8 @@ function signUpStudent(email, password, username)
                 console.log(err);
                 return failedRequestResponse;
             } 
-            else
-            {
-                console.log("1 record inserted to student table");
-                return successfulRequestResponse;
-            }
+            console.log("1 record inserted to student table");
+            return successfulRequestResponse;
         });
     });
 }
@@ -295,11 +294,8 @@ function signUpLecturer(email, password, username)
                 console.log(err);
                 return failedRequestResponse;
             } 
-            else
-            {
-                console.log("1 record inserted to lecturer table");
-                return successfulRequestResponse;
-            }
+            console.log("1 record inserted to lecturer table");
+            return successfulRequestResponse;
         });
     });
 }
