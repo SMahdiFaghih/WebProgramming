@@ -25,7 +25,7 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
-getFormData(27, "s@gmail.com");
+getFormStudents(27, "aabaam@gmail.com");
 
 app.post("/signup", (request, response) => {
     console.log("POST /signup");
@@ -50,6 +50,20 @@ app.post("/signup", (request, response) => {
         return response.status(400).end('role is invalid');
     }
 });
+
+function getFormStudents(form_id, lecturer_email)
+{
+    con.query('SELECT ff.form_id, ff.student_email, ff.result FROM filled_forms AS ff JOIN form ON form.form_id = ff.form_id WHERE ff.form_id = ? AND lecturer_email = ?', [form_id, lecturer_email], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log(result);
+        return result;
+    });
+}
 
 function getFormData(form_id, student_email)
 {
