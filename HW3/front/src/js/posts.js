@@ -54,6 +54,7 @@ function getUserPosts(){
         const postContainer = document.getElementById('postsContainer');
         if(!postContainer) return;
         const postHTML = document.createElement('div');
+        console.log(post._id)
         postHTML.className = "col-sm-6 col-lg-3";
         postHTML.innerHTML = `
           <div class="card text-white bg-primary">
@@ -68,7 +69,7 @@ function getUserPosts(){
                   </svg>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                <button class="dropdown-item" data-toggle="modal" data-target="#editModal">Edit</button>
+                <button class="dropdown-item" data-toggle="modal" data-target="#editModal${post._id}">Edit</button>
                 <button class="dropdown-item" id="deletePost${post._id}">Delete</button>
                 </div>
               </div>
@@ -78,7 +79,7 @@ function getUserPosts(){
             </div>
           </div>
         </div>
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editPost" aria-hidden="true">
+        <div class="modal fade" id="editModal${post._id}" tabindex="-1" role="dialog" aria-labelledby="editPost" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
