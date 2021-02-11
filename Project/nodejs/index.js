@@ -50,6 +50,20 @@ app.post("/signup", (request, response) => {
     }
 });
 
+function searchForms(content)
+{
+    con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + content + "%", "%" + content + "%"], function (err, result, fields) 
+    {
+        if (err)
+        {
+            console.log(err);
+            return failedRequestResponse;
+        } 
+        console.log(result);
+        return result;
+    });
+}
+
 function getLecturerForms(lecturerEmail)
 {
     con.query('SELECT * FROM form WHERE lecturer_email = ?', [lecturerEmail], function (err, result, fields) 
@@ -80,7 +94,7 @@ function getStudentForms(studentEmail)
 
 function getAllForms()
 {
-    con.query('SELECT * FROM form WHERE status = "Open"', function (err, result, fields) 
+    con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE status = "Open"', function (err, result, fields) 
     {
         if (err)
         {
