@@ -6,21 +6,22 @@ const {
     promisify
 } = require('util');
 const jwt = require('jsonwebtoken');
+const { decodeBase64 } = require('bcryptjs');
 
 exports.getAllPosts = async (req, res, next) => {
     try {
         const features = new APIFeatures(Post.find(), req.query)
-            .sort()
-            .paginate();
+        .sort();
         const posts = await features.query;
         res.status(200).json({
-            results: posts.length,
-            posts: posts
-        });
+        results: posts.length,
+        posts: posts
+    });
     } catch (error) {
         next(error);
     }
 };
+
 
 const id = 0;
 
@@ -52,6 +53,7 @@ exports.createPost = async (req, res, next) => {
             content: req.body.content,
             userId: decode.id,
         });
+
         res.status(201).json({
             id: post._id,
         });
@@ -63,3 +65,4 @@ exports.createPost = async (req, res, next) => {
 exports.updatePost = base.updateOne(Post);
 exports.deletePost = base.deleteOne(Post);
 exports.getPostById = base.getOne(Post);
+exports.getAllPostsByUser = base.getAll(Post);

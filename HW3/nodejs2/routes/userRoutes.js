@@ -10,7 +10,7 @@ router.use(authController.protect);
 
 router.route('/post/crud')
     .post(postController.createPost)
-    .get(postController.getAllPosts);
+    .get(postController.getAllPostsByUser);
 
 router.route('/post/crud/:id')
     .put(postController.updatePost)
