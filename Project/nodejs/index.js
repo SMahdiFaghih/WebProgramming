@@ -25,7 +25,7 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
-responseToForm("aabaam@gmail.com", "s@gmail.com", 27, "Accepted");
+editForm(27, "s@gmail.com", "Accepted");
 
 app.post("/signup", (request, response) => {
     console.log("POST /signup");
@@ -51,7 +51,7 @@ app.post("/signup", (request, response) => {
     }
 });
 
-function responseToForm(lecturer_email, student_email, form_id, result)
+function resolveForm(lecturer_email, student_email, form_id, result)
 {
     con.query('UPDATE filled_forms JOIN form ON form.form_id = filled_forms.form_id SET result = ? WHERE filled_forms.form_id = ? AND student_email = ? AND lecturer_email = ?', [result, form_id, student_email, lecturer_email], function (err, result, fields) 
     {
@@ -92,24 +92,37 @@ function deleteForm(form_id, student_email)
     }); 
 }
 
-function editFilledForm(form_id, student_email, fields)
+function editForm(form_id, student_email, fields)
 {
-    var updatedFields = fields.map(item => [item.data, form_id, student_email, item.field_name]);
-    var queries = '';
-    updatedFields.forEach(function (item) {
-        queries += mysql.format("UPDATE filled_forms_data SET data = ? WHERE form_id = ? AND student_Email = ? AND field_name = ?; ", item);
-    });
-
-    con.query(queries, function (err, result) 
+    con.query('SELECT result FROM filled_forms WHERE form_id = ? AND student_email = ? LIMIT 1', [form_id, student_email], function (err, result) 
     {
         if (err)
         {
             console.log(err);
             return failedRequestResponse;
+        }
+        if (result.result!= "Pending")
+        {
+            console.log("You can't edit a form that is resolved");
+            return failedRequestResponse;
         } 
-        console.log(fields.length + " records edited in filled_forms_data table");
-        return successfulRequestResponse;
-    });      
+        var updatedFields = fields.map(item => [item.data, form_id, student_email, item.field_name]);
+        var queries = '';
+        updatedFields.forEach(function (item) {
+            queries += mysql.format("UPDATE filled_forms_data SET data = ? WHERE form_id = ? AND student_Email = ? AND field_name = ?; ", item);
+        });
+    
+        con.query(queries, function (err, result) 
+        {
+            if (err)
+            {
+                console.log(err);
+                return failedRequestResponse;
+            } 
+            console.log(fields.length + " records edited in filled_forms_data table");
+            return successfulRequestResponse;
+        }); 
+    });          
 }
 
 function fillForm(form_id, student_email, fields)
