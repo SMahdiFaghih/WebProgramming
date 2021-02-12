@@ -313,6 +313,35 @@ app.delete("/form/delete", async (request, response) => {
     });
 });
 
+app.post("/request/resolve", async (request, response) => {
+    console.log("POST /request/resolve");
+    const formId = request.body.formId;
+    const student_email = request.body.student_email;
+    const resolve = request.body.result;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "lecturer")
+            {
+                resolveForm(result.email, student_email, formId, resolve, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else
+            {
+                return response.status(400).json({ "message": "Students can not resolve forms"});
+            }
+        }
+    });
+});
+
 function isEmailValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -347,17 +376,15 @@ function getFormData(form_id, student_email)
     });
 }
 
-function resolveForm(lecturer_email, student_email, form_id, result)
+function resolveForm(lecturer_email, student_email, form_id, result, callback)
 {
     con.query('UPDATE filled_forms JOIN form ON form.form_id = filled_forms.form_id SET result = ? WHERE filled_forms.form_id = ? AND student_email = ? AND lecturer_email = ?', [result, form_id, student_email, lecturer_email], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log("1 form resolved");
-        return successfulRequestResponse;
+        return callback({"message": successfulRequestResponse});
     });
 }
 
