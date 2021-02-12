@@ -93,31 +93,39 @@ app.post("/signin", async (request, response) => {
     }
 });
 
-app.post("/user/edit", (request, response) => {
+app.post("/user/edit", async (request, response) => {
     console.log("POST /user/edit");
     const newPassword = request.body.newPassword;
     const newUsername = request.body.newUsername;
-    const authenticationToken = request.headers.authorization;
-    console.log(authenticationToken);
-    var email = jwt.verify(authenticationToken, accessTokenSecret, "student");
-    console.log(email);
-    var email2 = jwt.verify(authenticationToken, accessTokenSecret, "lecurer");
-    console.log(email2);
-    /*if (role == "student")
+    if (newPassword.length < 8)
     {
-        var res = editStudent(email, newPassword, newUsername);
-        response.json(res);
+        return response.status(400).json({ "message": "Password must contain at least 8 characters."});
     }
-    else if (role == "lecturer")
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
-        var res = editLecturer(email, newPassword, newUsername);
-        response.json(res);
-    }
-    else
-    {
-        console.log("Role is invalid");
-        return response.status(400).json({ "message": "Role is invalid"});
-    }*/
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "student")
+            {
+                editStudent(result.email, newPassword, newUsername, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else if (result.role == "lecturer")
+            {
+                editLecturer(result.email, newPassword, newUsername, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+        }
+    });
 });
 
 function emailIsValid(email)
