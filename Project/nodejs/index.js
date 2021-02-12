@@ -286,6 +286,33 @@ app.post("/form/edit", async (request, response) => {
     });
 });
 
+app.delete("/form/delete", async (request, response) => {
+    console.log("DELETE /form/delete");
+    const formId = request.query.id;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "student")
+            {
+                deleteForm(formId, result.email, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else
+            {
+                return response.status(400).json({ "message": "You're not a student!"});
+            }
+        }
+    });
+});
+
 function isEmailValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -334,29 +361,25 @@ function resolveForm(lecturer_email, student_email, form_id, result)
     });
 }
 
-function deleteForm(form_id, student_email)
+function deleteForm(form_id, student_email, callback)
 {
     con.query('DELETE FROM filled_forms WHERE form_id = ? AND student_email = ? AND result = "Pending"', [form_id, student_email], function (err, result) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
         if (result.affectedRows != 1)
         {
-            console.log("your form is not Pending or not existed");
-            return failedRequestResponse;
+            return callback({"message": "This form is not Pending or not existed"});
         }
         con.query('DELETE FROM filled_forms_data WHERE form_id = ? AND student_email = ?', [form_id, student_email], function (err, result) 
         {
             if (err)
             {
-                console.log(err);
-                return failedRequestResponse;
+                return callback({"message": failedRequestResponse});
             } 
-            console.log(result.affectedRows + " records deleted from filled_forms_data table");
-            return successfulRequestResponse;
+            return callback({"message": successfulRequestResponse});
         });            
     }); 
 }
@@ -384,11 +407,9 @@ function editForm(form_id, student_email, fields, callback)
         {
             if (err)
             {
-                console.log(err);
-                return failedRequestResponse;
+                return callback({"message": failedRequestResponse});
             } 
-            console.log(fields.length + " records edited in filled_forms_data table");
-            return successfulRequestResponse;
+            return callback({"message": successfulRequestResponse});
         }); 
     });          
 }
