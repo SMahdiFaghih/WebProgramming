@@ -64,7 +64,7 @@ app.post("/signup", async (request, response) => {
     }
 });
 
-app.post("/signin", (request, response) => {
+app.post("/signin", async (request, response) => {
     console.log("POST /signin");
     const email = request.body.email;
     const password = request.body.password;
@@ -75,17 +75,20 @@ app.post("/signin", (request, response) => {
     }
     if (role == "student")
     {
-        var res = signInStudent(email, password);
-        response.json(res);
+        signInStudent(email, password, function(res) 
+        {
+            response.json(res);
+        });
     }
     else if (role == "lecturer")
     {
-        var res = signInLecturer(email, password);
-        response.json(res);
+        signInLecturer(email, password, function(res) 
+        {
+            response.json(res);
+        });
     }
     else
     {
-        console.log("Role is invalid");
         return response.status(400).json({ "message": "Role is invalid"});
     }
 });
@@ -367,37 +370,37 @@ function editLecturer(email, newPassword, newUsername)
     });    
 }
 
-function signInStudent(email, password)
+function signInStudent(email, password, callback)
 {
     con.query('SELECT * FROM student WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
     {
         if (err)
         {
-            return {"message": failedRequestResponse};
+            return callback({"message": failedRequestResponse});
         } 
         if (result.length == 0)
         {
-            return {"message": "Email or password is incorrect for student"};
+            return callback({"message": "Email or password is incorrect for student"});
         }
         const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
-        return {"token": accessToken};
+        return callback({"token": accessToken});
     });
 }
 
-function signInLecturer(email, password)
+function signInLecturer(email, password, callback)
 {
     con.query('SELECT * FROM lecturer WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
     {
         if (err)
         {
-            return {"message": failedRequestResponse};
+            return callback({"message": failedRequestResponse});
         } 
         if (result.length == 0)
         {
-            return {"message": "Email or password is incorrect for lecturer"};
+            return callback({"message": "Email or password is incorrect for lecturer"});
         }
         const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
-        return {"token": accessToken};
+        return callback({"token": accessToken});
     });
 }
 
