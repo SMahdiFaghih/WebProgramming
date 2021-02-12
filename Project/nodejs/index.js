@@ -34,11 +34,11 @@ app.post("/signup", async (request, response) => {
     const role = request.body.role;
     if (!isEmailValid(email))
     {
-        return response.status(400).json({ "message": "Email is not valid"});
+        response.status(400).json({ "message": "Email is not valid"});
     }
     if (password.length < 8)
     {
-        return response.status(400).json({ "message": "Password must contain at least 8 characters."});
+        response.status(400).json({ "message": "Password must contain at least 8 characters."});
     }
     if (role == "student")
     {
@@ -51,7 +51,7 @@ app.post("/signup", async (request, response) => {
     {
         if (!LecturerEmails.includes(email))
         {
-            return response.status(400).json({ "message": "Lecturer email not existed at all!"});
+            response.status(400).json({ "message": "Lecturer email not existed at all!"});
         }
         signUpLecturer(email, password, username, function(res) 
         {
@@ -60,7 +60,7 @@ app.post("/signup", async (request, response) => {
     }
     else
     {
-        return response.status(400).json({ "message": "Role is invalid"});
+        response.status(400).json({ "message": "Role is invalid"});
     }
 });
 
@@ -71,7 +71,7 @@ app.post("/signin", async (request, response) => {
     const role = request.body.role;
     if (!isEmailValid(email))
     {
-        return response.status(400).json({ "message": "Email is not valid"});
+        response.status(400).json({ "message": "Email is not valid"});
     }
     if (role == "student")
     {
@@ -89,7 +89,7 @@ app.post("/signin", async (request, response) => {
     }
     else
     {
-        return response.status(400).json({ "message": "Role is invalid"});
+        response.status(400).json({ "message": "Role is invalid"});
     }
 });
 
@@ -99,14 +99,14 @@ app.post("/user/edit", async (request, response) => {
     const newUsername = request.body.newUsername;
     if (newPassword.length < 8)
     {
-        return response.status(400).json({ "message": "Password must contain at least 8 characters."});
+        response.status(400).json({ "message": "Password must contain at least 8 characters."});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -143,7 +143,7 @@ app.get("/form/user", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -184,7 +184,7 @@ app.post("/form/create", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -197,7 +197,7 @@ app.post("/form/create", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "Students can not create forms"});
+                response.status(400).json({ "message": "Students can not create forms"});
             }
         }
     });
@@ -211,7 +211,7 @@ app.post("/form/close", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -224,7 +224,7 @@ app.post("/form/close", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "Students can not close forms"});
+                response.status(400).json({ "message": "Students can not close forms"});
             }
         }
     });
@@ -239,7 +239,7 @@ app.post("/form/send", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -252,7 +252,7 @@ app.post("/form/send", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "You're not a student!"});
+                response.status(400).json({ "message": "You're not a student!"});
             }
         }
     });
@@ -267,7 +267,7 @@ app.post("/form/edit", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -280,7 +280,7 @@ app.post("/form/edit", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "You're not a student!"});
+                response.status(400).json({ "message": "You're not a student!"});
             }
         }
     });
@@ -294,7 +294,7 @@ app.delete("/form/delete", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -307,14 +307,14 @@ app.delete("/form/delete", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "You're not a student!"});
+                response.status(400).json({ "message": "You're not a student!"});
             }
         }
     });
 });
 
-app.post("/request/resolve", async (request, response) => {
-    console.log("POST /request/resolve");
+app.post("/form/resolve", async (request, response) => {
+    console.log("POST /form/resolve");
     const formId = request.body.formId;
     const student_email = request.body.student_email;
     const resolve = request.body.result;
@@ -323,7 +323,7 @@ app.post("/request/resolve", async (request, response) => {
     {
         if (result == undefined)
         {
-            return response.status(407).json({ "message": "Authentication failed"});
+            response.status(407).json({ "message": "Authentication failed"});
         }
         else
         {
@@ -336,43 +336,135 @@ app.post("/request/resolve", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "Students can not resolve forms"});
+                response.status(400).json({ "message": "Students can not resolve forms"});
             }
+        }
+    });
+});
+
+app.post("/form/filledFormData", async (request, response) => {
+    console.log("POST /form/filledFormData");
+    const formId = request.body.formId;
+    const student_email = request.body.student_email;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            getFilledFormData(formId, student_email, function(res) 
+            {
+                response.json(res);
+            });    
+        }
+    });
+});
+
+app.post("/form/students", async (request, response) => {
+    console.log("POST /form/students");
+    const formId = request.body.formId;
+    const student_email = request.body.student_email;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "lecturer")
+            {
+                getFormStudents(formId, result.email, function(res) 
+            {
+                response.json(res);
+            });   
+            }
+            else
+            {
+                response.status(400).json({ "message": "Students can not get form students"});
+            }
+        }
+    });
+});
+
+app.post("/form/emptyFormData", async (request, response) => {
+    console.log("POST /form/emptyFormData");
+    const formId = request.body.formId;
+    const lecturer_email = request.body.lecturer_email;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            getEmptyFormData(formId, lecturer_email, function(res) 
+            {
+                response.json(res);
+            });    
         }
     });
 });
 
 function isEmailValid(email)
 {
-  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return regex.test(String(email).toLowerCase());
+    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(String(email).toLowerCase());
 }
 
-function getFormStudents(form_id, lecturer_email)
+function getEmptyFormData(form_id, lecturer_email, callback)
+{
+    var emptyFormData;
+    con.query('SELECT * FROM form WHERE form_id = ? AND lecturer_email = ? AND status = "Open" LIMIT 1', [form_id, lecturer_email], function (err, result, fields) 
+    {
+        if (err)
+        {
+            return callback({"message": failedRequestResponse});
+        }
+        if (result.length == 0)
+        {
+            return callback({"message": failedRequestResponse});
+        }
+        emptyFormData = {"formContent": result[0]};
+        con.query('SELECT * FROM form_fields WHERE form_id = ?', [form_id], function (err, result) 
+        {
+            if (err)
+            {
+                return callback({"message": failedRequestResponse});
+            } 
+            emptyFormData["fields"] = result;
+            return callback(emptyFormData);
+        }); 
+    });
+}
+
+function getFormStudents(form_id, lecturer_email, callback)
 {
     con.query('SELECT ff.form_id, ff.student_email, ff.result FROM filled_forms AS ff JOIN form ON form.form_id = ff.form_id WHERE ff.form_id = ? AND lecturer_email = ?', [form_id, lecturer_email], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
-        } 
-        console.log(result);
-        return result;
+            return callback({"message": failedRequestResponse});
+        }
+        return callback({"forms": result});
     });
 }
 
-function getFormData(form_id, student_email)
+function getFilledFormData(form_id, student_email, callback)
 {
     con.query('SELECT * FROM filled_forms_data WHERE student_email = ? AND form_id = ?', [student_email, form_id], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
-        } 
-        console.log(result);
-        return result;
+            return callback({"message": failedRequestResponse});
+        }
+        return callback({"formContent": result});
     });
 }
 
