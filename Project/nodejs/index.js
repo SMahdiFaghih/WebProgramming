@@ -354,27 +354,27 @@ function getAllForms()
     });
 }
 
-function editStudent(email, newPassword, newUsername)
+function editStudent(email, newPassword, newUsername, callback)
 {
     con.query('UPDATE student SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
     {
         if (err)
         {
-            return {"message": failedRequestResponse};
+            return callback({"message": failedRequestResponse});
         } 
-        return {"message": successfulRequestResponse};
+        return callback({"message": successfulRequestResponse});
     }); 
 }   
 
-function editLecturer(email, newPassword, newUsername)
+function editLecturer(email, newPassword, newUsername, callback)
 {
     con.query('UPDATE lecturer SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
     {
         if (err)
         {
-            return {"message": failedRequestResponse};
+            return callback({"message": failedRequestResponse});
         } 
-        return {"message": successfulRequestResponse};
+        return callback({"message": successfulRequestResponse});
     });    
 }
 
