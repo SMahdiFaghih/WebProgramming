@@ -25,31 +25,103 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
-getFormStudents(27, "aabaam@gmail.com");
 
-app.post("/signup", (request, response) => {
+app.post("/signup", async (request, response) => {
     console.log("POST /signup");
     const email = request.body.email;
     const password = request.body.password;
     const username = request.body.username;
-    //todo check to prevent invalid email
     const role = request.body.role;
+    if (!emailIsValid(email))
+    {
+        return response.status(400).json({ "message": "Email is not valid"});
+    }
+    if (password.length < 8)
+    {
+        return response.status(400).json({ "message": "Password must contain at least 8 characters."});
+    }
     if (role == "student")
     {
-        var res = signUpStudent(email, password, username);
-        response.json({ "status": res });
+        signUpStudent(email, password, username, function(res) 
+        {
+            response.json({ "message": res });
+        });
     }
     else if (role == "lecturer")
     {
-        var res = signUpLecturer(email, password, username);
-        response.json({ "status": res });
+        if (!LecturerEmails.includes(email))
+        {
+            return response.status(400).json({ "message": "Lecturer email not existed at all!"});
+        }
+        signUpLecturer(email, password, username, function(res) 
+        {
+            response.json({ "message": res });
+        });
     }
     else
     {
-        console.log("role is invalid");
-        return response.status(400).end('role is invalid');
+        return response.status(400).json({ "message": "Role is invalid"});
     }
 });
+
+app.post("/signin", (request, response) => {
+    console.log("POST /signin");
+    const email = request.body.email;
+    const password = request.body.password;
+    const role = request.body.role;
+    if (!emailIsValid(email))
+    {
+        return response.status(400).json({ "message": "Email is not valid"});
+    }
+    if (role == "student")
+    {
+        var res = signInStudent(email, password);
+        response.json(res);
+    }
+    else if (role == "lecturer")
+    {
+        var res = signInLecturer(email, password);
+        response.json(res);
+    }
+    else
+    {
+        console.log("Role is invalid");
+        return response.status(400).json({ "message": "Role is invalid"});
+    }
+});
+
+app.post("/user/edit", (request, response) => {
+    console.log("POST /user/edit");
+    const newPassword = request.body.newPassword;
+    const newUsername = request.body.newUsername;
+    const authenticationToken = request.headers.authorization;
+    console.log(authenticationToken);
+    var email = jwt.verify(authenticationToken, accessTokenSecret, "student");
+    console.log(email);
+    var email2 = jwt.verify(authenticationToken, accessTokenSecret, "lecurer");
+    console.log(email2);
+    /*if (role == "student")
+    {
+        var res = editStudent(email, newPassword, newUsername);
+        response.json(res);
+    }
+    else if (role == "lecturer")
+    {
+        var res = editLecturer(email, newPassword, newUsername);
+        response.json(res);
+    }
+    else
+    {
+        console.log("Role is invalid");
+        return response.status(400).json({ "message": "Role is invalid"});
+    }*/
+});
+
+function emailIsValid(email)
+{
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regex.test(String(email).toLowerCase());
+}
 
 function getFormStudents(form_id, lecturer_email)
 {
@@ -273,56 +345,26 @@ function getAllForms()
 
 function editStudent(email, newPassword, newUsername)
 {
-    con.query('SELECT * FROM student WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
+    con.query('UPDATE student SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return {"message": failedRequestResponse};
         } 
-        if (result.length == 0)
-        {
-            console.log("email or password is incorrect for student");
-            return failedRequestResponse;
-        }
-        con.query('UPDATE student SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
-        {
-            if (err)
-            {
-                console.log(err);
-                return failedRequestResponse;
-            } 
-            console.log("student info edited");
-            return successfulRequestResponse;
-        });
-    });
-}
+        return {"message": successfulRequestResponse};
+    }); 
+}   
 
 function editLecturer(email, newPassword, newUsername)
 {
-    con.query('SELECT * FROM lecturer WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
+    con.query('UPDATE lecturer SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return {"message": failedRequestResponse};
         } 
-        if (result.length == 0)
-        {
-            console.log("email or password is incorrect for lecturer");
-            return failedRequestResponse;
-        }
-        con.query('UPDATE lecturer SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
-        {
-            if (err)
-            {
-                console.log(err);
-                return failedRequestResponse;
-            } 
-            console.log("lecturer info edited");
-            return successfulRequestResponse;
-        });
-    });
+        return {"message": successfulRequestResponse};
+    });    
 }
 
 function signInStudent(email, password)
@@ -331,18 +373,14 @@ function signInStudent(email, password)
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return {"message": failedRequestResponse};
         } 
         if (result.length == 0)
         {
-            console.log("email or password is incorrect for student");
-            return failedRequestResponse;
+            return {"message": "Email or password is incorrect for student"};
         }
-        console.log("student signedIn");
         const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
-        console.log(accessToken);
-        return successfulRequestResponse;
+        return {"token": accessToken};
     });
 }
 
@@ -352,76 +390,59 @@ function signInLecturer(email, password)
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return {"message": failedRequestResponse};
         } 
         if (result.length == 0)
         {
-            console.log("email or password is incorrect for lecturer");
-            return failedRequestResponse;
+            return {"message": "Email or password is incorrect for lecturer"};
         }
-        console.log("lecturer signedIn");
         const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
-        console.log(accessToken);
-        return successfulRequestResponse;
+        return {"token": accessToken};
     });
 }
 
-function signUpStudent(email, password, username)
+function signUpStudent(email, password, username, callback)
 {
     con.query('SELECT * FROM student WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback(failedRequestResponse);
         } 
         if (result.length != 0)
         {
-            console.log("student exists with this email");
-            return failedRequestResponse;
+            return callback("Student exists with this email");
         }
         con.query('INSERT INTO student SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
         {
             if (err)
             {
-                console.log(err);
-                return failedRequestResponse;
+                return callback(failedRequestResponse);
             } 
-            console.log("1 record inserted to student table");
-            return successfulRequestResponse;
+            return callback(successfulRequestResponse);
         });
     });
 }
 
-function signUpLecturer(email, password, username)
+function signUpLecturer(email, password, username, callback)
 {
-    if (!LecturerEmails.includes(email))
-    {
-        console.log("lecturer email not existed at all!");
-        return failedRequestResponse;
-    }
     con.query('SELECT * FROM lecturer WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback(failedRequestResponse);
         } 
         if (result.length != 0)
         {
-            console.log("lecturer exists with this email");
-            return failedRequestResponse;
+            return callback("Lecturer exists with this email");
         }
         con.query('INSERT INTO lecturer SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
         {
             if (err)
             {
-                console.log(err);
-                return failedRequestResponse;
+                return callback(failedRequestResponse);
             } 
-            console.log("1 record inserted to lecturer table");
-            return successfulRequestResponse;
+            return callback(successfulRequestResponse);
         });
     });
 }
@@ -519,15 +540,11 @@ function createDatabase()
 }
 
 
-/*app.post("/", (request, response) => {
+/*app.get("/", (req, response) => {
 
-});
-
-app.get("/", (req, response) => {
-
-});
+});*/
 
 
 app.listen(port, () => {
     console.log(`NodeJs Server is listening at http://127.0.0.1:${port}`);
-})*/
+})
