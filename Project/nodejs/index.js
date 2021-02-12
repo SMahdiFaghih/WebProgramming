@@ -203,6 +203,33 @@ app.post("/form/create", async (request, response) => {
     });
 });
 
+app.post("/form/close", async (request, response) => {
+    console.log("POST /form/closee");
+    const formId = request.body.formId;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "lecturer")
+            {
+                closeForm(result.email, formId, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else
+            {
+                return response.status(400).json({ "message": "Students can not close forms"});
+            }
+        }
+    });
+});
+
 function isEmailValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -334,17 +361,15 @@ function fillForm(form_id, student_email, fields)
     });   
 }
 
-function closeForm(lecturer_email, form_id)
+function closeForm(lecturer_email, form_id, callback)
 {
     con.query('UPDATE form SET status = "Closed" WHERE form_id = ? AND lecturer_email = ?', [form_id, lecturer_email], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log("1 form Closed");
-        return successfulRequestResponse;
+        return callback({"message": successfulRequestResponse});    
     });   
 }
 
