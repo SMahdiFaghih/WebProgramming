@@ -230,6 +230,34 @@ app.post("/form/close", async (request, response) => {
     });
 });
 
+app.post("/form/send", async (request, response) => {
+    console.log("POST /form/send");
+    const formId = request.body.formId;
+    const fields = request.body.fields;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "student")
+            {
+                fillForm(formId, result.email, fields, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else
+            {
+                return response.status(400).json({ "message": "Dude! you're not a student :)"});
+            }
+        }
+    });
+});
+
 function isEmailValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -338,25 +366,21 @@ function editForm(form_id, student_email, fields)
     });          
 }
 
-function fillForm(form_id, student_email, fields)
+function fillForm(form_id, student_email, fields, callback)
 {
     con.query('INSERT IGNORE INTO filled_forms SET form_id = ?, student_email = ?, result = "Pending"', [form_id, student_email], function (err, result) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log("1 record inserted to filled_forms table");
         con.query('INSERT INTO filled_forms_data (form_id, student_email, field_name, data) VALUES ?', [fields.map(item => [form_id, student_email, item.field_name, item.data])], function (err, result) 
         {
             if (err)
             {
-                console.log(err);
-                return failedRequestResponse;
+                return callback({"message": failedRequestResponse});
             } 
-            console.log(fields.length + " records inserted to filled_forms_data table");
-            return successfulRequestResponse;
+            return callback({"message": successfulRequestResponse});
         });            
     });   
 }
