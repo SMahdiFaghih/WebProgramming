@@ -174,6 +174,35 @@ app.post("/form/search", async (request, response) => {
     });
 });
 
+app.post("/form/create", async (request, response) => {
+    console.log("POST /form/create");
+    const title = request.body.formContent.title;
+    const description = request.body.formContent.description;
+    const fields = request.body.formContent.fields;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "lecturer")
+            {
+                createForm(result.email, title, description, fields, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else
+            {
+                return response.status(400).json({ "message": "Students can not create forms"});
+            }
+        }
+    });
+});
+
 function isEmailValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -319,27 +348,23 @@ function closeForm(lecturer_email, form_id)
     });   
 }
 
-function createForm(lecturer_email, title, description, fields)
+function createForm(lecturer_email, title, description, fields, callback)
 {
     var form_id;
     con.query('INSERT INTO form SET lecturer_email = ?, title = ?, description = ?, status = "Open"', [lecturer_email, title, description], function (err, result) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log("1 record inserted to form table");
         form_id = result.insertId;
         con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, item.field_name, item.required, item.type, item.checklist_options])], function (err, result) 
         {
             if (err)
             {
-                console.log(err);
-                return failedRequestResponse;
+                return callback({"message": failedRequestResponse});
             } 
-            console.log(fields.length + " records inserted to form_fileds table");
-            return successfulRequestResponse;
+            return callback({"message": successfulRequestResponse});
         });            
     });   
 }
