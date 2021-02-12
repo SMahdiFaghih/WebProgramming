@@ -128,6 +128,14 @@ app.post("/user/edit", async (request, response) => {
     });
 });
 
+app.get("/form/all", (req, response) => {
+    console.log("GET /form/all");
+    getAllForms( function(res) 
+    {
+        response.json(res);
+    }); 
+});
+
 function emailIsValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -340,17 +348,15 @@ function getStudentForms(studentEmail)
     });
 }
 
-function getAllForms()
+function getAllForms(callback)
 {
     con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE status = "Open"', function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log(result);
-        return result;
+        return callback({"forms": result});
     });
 }
 
@@ -549,12 +555,6 @@ function createDatabase()
         }
     });
 }
-
-
-/*app.get("/", (req, response) => {
-
-});*/
-
 
 app.listen(port, () => {
     console.log(`NodeJs Server is listening at http://127.0.0.1:${port}`);
