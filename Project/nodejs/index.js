@@ -252,7 +252,35 @@ app.post("/form/send", async (request, response) => {
             }
             else
             {
-                return response.status(400).json({ "message": "Dude! you're not a student :)"});
+                return response.status(400).json({ "message": "You're not a student!"});
+            }
+        }
+    });
+});
+
+app.post("/form/edit", async (request, response) => {
+    console.log("POST /form/edit");
+    const formId = request.body.formId;
+    const fields = request.body.fields;
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "student")
+            {
+                editForm(formId, result.email, fields, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else
+            {
+                return response.status(400).json({ "message": "You're not a student!"});
             }
         }
     });
@@ -333,23 +361,22 @@ function deleteForm(form_id, student_email)
     }); 
 }
 
-function editForm(form_id, student_email, fields)
+function editForm(form_id, student_email, fields, callback)
 {
     con.query('SELECT result FROM filled_forms WHERE form_id = ? AND student_email = ? LIMIT 1', [form_id, student_email], function (err, result) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         }
-        if (result.result!= "Pending")
+        if (result[0].result != "Pending")
         {
-            console.log("You can't edit a form that is resolved");
-            return failedRequestResponse;
+            return callback({"message": "You can't edit a form that is resolved"});
         } 
         var updatedFields = fields.map(item => [item.data, form_id, student_email, item.field_name]);
         var queries = '';
-        updatedFields.forEach(function (item) {
+        updatedFields.forEach(function (item) 
+        {
             queries += mysql.format("UPDATE filled_forms_data SET data = ? WHERE form_id = ? AND student_Email = ? AND field_name = ?; ", item);
         });
     
