@@ -32,7 +32,7 @@ app.post("/signup", async (request, response) => {
     const password = request.body.password;
     const username = request.body.username;
     const role = request.body.role;
-    if (!emailIsValid(email))
+    if (!isEmailValid(email))
     {
         return response.status(400).json({ "message": "Email is not valid"});
     }
@@ -69,7 +69,7 @@ app.post("/signin", async (request, response) => {
     const email = request.body.email;
     const password = request.body.password;
     const role = request.body.role;
-    if (!emailIsValid(email))
+    if (!isEmailValid(email))
     {
         return response.status(400).json({ "message": "Email is not valid"});
     }
@@ -165,7 +165,16 @@ app.get("/form/user", async (request, response) => {
     });
 });
 
-function emailIsValid(email)
+app.post("/form/search", async (request, response) => {
+    console.log("POST /form/search");
+    var content = request.body.content;
+    searchForms(content, function(res) 
+    {
+        response.json(res);
+    });
+});
+
+function isEmailValid(email)
 {
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return regex.test(String(email).toLowerCase());
@@ -335,17 +344,15 @@ function createForm(lecturer_email, title, description, fields)
     });   
 }
 
-function searchForms(content)
+function searchForms(content, callback)
 {
     con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + content + "%", "%" + content + "%"], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log(result);
-        return result;
+        return callback({"forms": result});
     });
 }
 
