@@ -128,12 +128,41 @@ app.post("/user/edit", async (request, response) => {
     });
 });
 
-app.get("/form/all", (req, response) => {
+app.get("/form/all", async (request, response) => {
     console.log("GET /form/all");
     getAllForms( function(res) 
     {
         response.json(res);
     }); 
+});
+
+app.get("/form/user", async (request, response) => {
+    console.log("GET /form/user");
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            return response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "student")
+            {
+                getStudentForms(result.email, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+            else if (result.role == "lecturer")
+            {
+                getLecturerForms(result.email, function(res) 
+                {
+                    response.json(res);
+                }); 
+            }
+        }
+    });
 });
 
 function emailIsValid(email)
@@ -320,31 +349,27 @@ function searchForms(content)
     });
 }
 
-function getLecturerForms(lecturerEmail)
+function getLecturerForms(lecturerEmail, callback)
 {
     con.query('SELECT * FROM form WHERE lecturer_email = ?', [lecturerEmail], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log(result);
-        return result;
+        return callback({"forms": result});
     });
 }
 
-function getStudentForms(studentEmail)
+function getStudentForms(studentEmail, callback)
 {
     con.query('SELECT * FROM filled_forms JOIN form ON form.form_id = filled_forms.form_id WHERE student_email = ?', [studentEmail], function (err, result, fields) 
     {
         if (err)
         {
-            console.log(err);
-            return failedRequestResponse;
+            return callback({"message": failedRequestResponse});
         } 
-        console.log(result);
-        return result;
+        return callback({"forms": result});
     });
 }
 
