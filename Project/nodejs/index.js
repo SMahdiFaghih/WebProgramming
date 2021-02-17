@@ -588,7 +588,7 @@ function getEmptyFormData(form_id, callback)
             {
                 return callback({"message": failedRequestResponse});
             } 
-            emptyFormData["fields"] = result;
+            emptyFormData["fields"] = validateData(result);
             return callback(emptyFormData);
         }); 
     });
@@ -602,7 +602,7 @@ function getFormStudents(form_id, lecturer_email, callback)
         {
             return callback({"message": failedRequestResponse});
         }
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
@@ -614,7 +614,7 @@ function getFilledFormData(form_id, student_email, callback)
         {
             return callback({"message": failedRequestResponse});
         }
-        return callback({"formContent": result});
+        return callback({"formContent": validateData(result)});
     });
 }
 
@@ -743,7 +743,7 @@ function searchForms(content, callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
@@ -755,7 +755,7 @@ function getLecturerForms(lecturerEmail, callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
@@ -767,7 +767,7 @@ function getStudentForms(studentEmail, callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
