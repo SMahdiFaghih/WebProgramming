@@ -23,13 +23,14 @@ function CreateForm() {
     
     function createForm(){
         const formContent = state;
-        formContent.fields.forEach(f => {
+        formContent.fields.forEach((f,i) => {
             if(f.required){
                 f.required = 1;
             }
             else{
                 f.required = 0;
             }
+            f.id = i;
         })
         formsService.createForm({formContent})
         .then((data)=>{

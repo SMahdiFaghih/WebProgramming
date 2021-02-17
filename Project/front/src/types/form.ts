@@ -51,6 +51,7 @@ export interface FormContent{
 }
 
 export interface FormField{
+    id: number,
     field_name:string,
     required: boolean | number,
     type: FormFieldType,
