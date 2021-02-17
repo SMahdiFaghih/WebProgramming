@@ -20,7 +20,7 @@ export default function ProfileMenu() {
   const logout = ()=>{
     handleClose();
     localStorage.setItem('Token', '');
-    history.push('/');
+    history.push('/signin');
   }
 
   return (

@@ -1,26 +1,18 @@
-import { Button, Icon, IconButton, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Button, Icon, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormApi from '../api/formApis';
 import { GetFormSubmitsRes } from '../types/form';
 import { useQuery } from '../Utils/routing.utils';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
 const formsService = new FormApi();
 
 function SubmitList() {
-  const classes = useStyles();
   const [state , setState] = useState<GetFormSubmitsRes>({
       forms: []
   })
   const query = useQuery();
   useEffect(() => {
-   
     getFormSubmits();
   }, []);
 
@@ -47,11 +39,10 @@ function SubmitList() {
         </Button>
       </Link>
       </div>
-      <div className="FormsList">
-         
+      <div className="forms-list">
           <div className="desciption mb-4">Submits to your Form can be seen in the table bellow, you can also accept o deny them.</div>
           <TableContainer component={Paper}>
-              <Table className={classes.table} aria-label="forms table">
+              <Table className="table" aria-label="forms table">
                   <TableHead>
                   <TableRow>
                       <TableCell>No.</TableCell>

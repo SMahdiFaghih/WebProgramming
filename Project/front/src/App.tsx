@@ -6,9 +6,11 @@ import Signin from './views/Signin';
 import Signup from './views/Signup';
 import Dashboard from './views/Dashboard';
 import PrivateRoute from './AuthGuard';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  const notify = () => toast("Wow so easy!");
   return (
     <div className="App">
       <Router>
@@ -18,6 +20,8 @@ function App() {
           <PrivateRoute path="/dashboard" component={Dashboard}></PrivateRoute>
         </Switch>
       </Router>
+      <button onClick={notify}>Notify!</button>
+      <ToastContainer />
     </div>
   );
 }

@@ -1,7 +1,6 @@
-import { responsiveFontSizes } from "@material-ui/core";
 import { BASE_URL } from "../config/config";
-import { EditUserPayload, EditUserRes, SigninPayload, SigninRes, SignupPayload, SignupRes } from "../types/user";
-import { getHeader, handleErrors } from "../Utils/api.utils";
+import { EditUserPayload, EditUserRes, GetUserRes, SigninPayload, SigninRes, SignupPayload, SignupRes } from "../types/user";
+import { getAuthHeader, getHeader, handleErrors } from "../Utils/api.utils";
 
 class UserApi{
     async signup(payload : SignupPayload){
@@ -29,15 +28,26 @@ class UserApi{
     }
 
     async editUser(payload: EditUserPayload){
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
         return fetch(`${BASE_URL}/user/edit`, {
             method: 'POST',
-            headers: myHeaders,
+            headers: getAuthHeader(),
             body: JSON.stringify(payload),
             redirect: 'follow'
         })
-        .then(response => response.text() as EditUserRes)
+        .then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as EditUserRes)
+    }
+
+    async getUser(){
+        return fetch(`${BASE_URL}/user/getUserData`, {
+            method: 'GET',
+            headers: getAuthHeader(),
+            redirect: 'follow'
+        })
+        .then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as GetUserRes)
     }
 
 }

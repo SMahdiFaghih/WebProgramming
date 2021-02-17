@@ -1,22 +1,13 @@
-import { Icon, IconButton,Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { FormControl, Icon, IconButton, InputAdornment, InputLabel, OutlinedInput, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormApi from '../api/formApis';
 import { GetAllFormsRes } from '../types/form';
 
-const useStyles = makeStyles({
-    table: {
-      minWidth: 650,
-    },
-  });
-
-
 const formsService = new FormApi();
 
 function AllForms() {
-    const classes = useStyles();
     const [state , setState] = useState<GetAllFormsRes>({
         forms: []
     })
@@ -33,11 +24,37 @@ function AllForms() {
         .catch(e=>console.error(e))
     }
 
+    const searchForm = (e: any) =>{
+        const content = e.target.value;
+        if(!content){
+            getAllForms();
+            return;
+        }
+        formsService.searchForms({content})
+        .then(data=>{
+            setState(data)
+        })
+        .catch(e=>console.error(e))
+    }
+
     return (
-        <div className="FormsList">
+        <div className="forms-list">
+            <h3 className="mb-3">All Forms</h3>
             <div className="desciption mb-4">All Forms can be seen in the table bellow, you can fill the one's you like.</div>
+            <FormControl className="w-100 mb-4" variant="outlined">
+                <InputLabel htmlFor="search">Search</InputLabel>
+                <OutlinedInput
+                    id="search"
+                    onChange={searchForm}
+                    startAdornment={
+                    <InputAdornment position="start">
+                        <Icon>search</Icon>
+                    </InputAdornment>}
+                    labelWidth={60}
+                />
+            </FormControl>
             <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="forms table">
+                <Table className="table" aria-label="forms table">
                     <TableHead>
                     <TableRow>
                         <TableCell>No.</TableCell>

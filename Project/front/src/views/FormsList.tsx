@@ -1,30 +1,20 @@
 import { Icon, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormApi from '../api/formApis';
-import { GetUserFormsRes } from '../types/form';
-
-const useStyles = makeStyles({
-    table: {
-      minWidth: 650,
-    },
-  });
-
+import { FormData, GetUserFormsRes } from '../types/form';
 
 const formsService = new FormApi();
 
 function FormsList() {
-    const classes = useStyles();
+    const role = JSON.parse(localStorage.getItem('Role') as string)
     const [state , setState] = useState<GetUserFormsRes>({
         forms: []
     })
-
-
-  useEffect(() => {
-      getForms()
-  }, []);
+    useEffect(() => {
+        getForms()
+    }, []);
 
     function getForms(){
         formsService.getUserForms()
@@ -42,11 +32,45 @@ function FormsList() {
         .catch(e=>console.error(e))
     }
 
+    const formActions = (f:FormData)=>{
+        if(role === 'lecturer')
+            return( 
+            <>
+            <TableCell>
+                <Link to={`/dashboard/submit-list?id=${f.form_id}`}>
+                        Responses
+                </Link>
+            </TableCell>
+            <TableCell >
+                <IconButton edge="start"  color="inherit" aria-label="menu" onClick={()=>closeForm(f.form_id)}>
+                    <Icon>close</Icon>
+                </IconButton>
+            </TableCell>
+            </>)
+    }
+
+    const description = ()=>{
+        if(role === 'lecturer'){
+            return(
+                <div className="desciption mb-4">
+                    These are the froms that you have made, you can close them or see the responses to the forms.
+                </div>
+            )
+        }else{
+            return(
+                <div className="desciption mb-4">
+                    These are the froms that you have filled, you can see their status in here.
+                </div>
+            )
+        }
+    }
+
     return (
-        <div className="FormsList">
-            <div className="desciption mb-4">Your Forms can be seen in the table bellow, you can also Edit or Delete them.</div>
+        <div className="forms-list">
+            <h3 className="mb-3">My Forms</h3>
+            {description()}
             <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="forms table">
+                <Table className="table" aria-label="forms table">
                     <TableHead>
                     <TableRow>
                         <TableCell>No.</TableCell>
@@ -68,16 +92,7 @@ function FormsList() {
                                 </div>
                                </TableCell>
                             <TableCell>{f.status}</TableCell>
-                            <TableCell>
-                            <Link to={`/dashboard/submit-list?id=${f.form_id}`}>
-                                    Responses
-                            </Link>
-                            </TableCell>
-                            <TableCell >
-                            <IconButton edge="start"  color="inherit" aria-label="menu" onClick={()=>closeForm(f.form_id)}>
-                                <Icon>close</Icon>
-                            </IconButton>
-                            </TableCell>
+                        {formActions(f)}
                         </TableRow>
                     ))}
                     </TableBody>

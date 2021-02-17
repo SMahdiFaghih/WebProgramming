@@ -1,9 +1,8 @@
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Icon, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import FormApi from '../api/formApis';
-import { default as AddCheckListDialog, default as AddChecklistDialog } from '../dialogs/AddCheckList';
+import { default as AddCheckListDialog } from '../dialogs/AddCheckList';
 import AddFieldDialog from '../dialogs/AddField';
 import { FormContent, FormField } from '../types/form';
 

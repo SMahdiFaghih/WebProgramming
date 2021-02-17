@@ -109,3 +109,7 @@ export interface GetRequestsRes{
     formId: number,
     student_email:string
 }
+
+export interface  SearchFormsPayload{
+    content: string
+}

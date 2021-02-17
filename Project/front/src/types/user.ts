@@ -8,7 +8,7 @@ export interface SignupPayload{
 export type UserType = "lecturer" | "student"
 
 export interface SignupRes{
-
+    token: string
 }
 
 export interface SigninPayload{
@@ -28,3 +28,10 @@ export interface EditUserPayload{
 export interface EditUserRes{
 
 }
+
+export type GetUserRes = 
+    {
+    email: string
+    username: string,
+    role: string
+    }[]

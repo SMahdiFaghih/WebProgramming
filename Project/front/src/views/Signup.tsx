@@ -50,9 +50,14 @@ function Signup() {
         console.log(state)
         if(hasError) return
         userApiService.signup(state).then(data=>{
-            console.log(data)
-            // localStorage.setItem('Token', data.token)
+            localStorage.setItem('Token', data.token)
             history.push('/dashboard');
+            userApiService.getUser()
+            .then(data=>{
+                localStorage.setItem('Role', JSON.stringify(data[0].role));
+            }).catch(e=>{
+                console.error(e);
+            })
         }).catch(e=>{
             console.error(error)
         })
