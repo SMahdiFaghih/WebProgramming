@@ -671,7 +671,7 @@ function getEmptyFormData(form_id, callback)
         {
             return callback({"message": failedRequestResponse});
         }
-        emptyFormData = {"formContent": result[0]};
+        emptyFormData = {"formContent": validateData(result[0])};
         con.query('SELECT * FROM form_fields WHERE form_id = ?', [form_id], function (err, result) 
         {
             if (err)
@@ -1004,6 +1004,18 @@ function signUpLecturer(email, password, username, callback)
 
 function validateData(result)
 {
+    if (result.length == undefined)
+    {
+        var item = result;
+        Object.keys(item).forEach(function(key) 
+        {
+            if (key != "form_id")
+            {
+                item[key] = item[key].toString().split("'").join("");
+            }
+        });
+    }
+
     for (let i = 0; i < result.length; i++) 
     {
         var item = result[i];
