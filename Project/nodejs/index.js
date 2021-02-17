@@ -45,7 +45,7 @@ app.post("/signup", async (request, response) => {
     {
         signUpStudent(email, password, username, function(res) 
         {
-            if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+            if (res != successfulRequestResponse)
             {
                 response.status(401).json({ "message": res });
             }
@@ -66,7 +66,7 @@ app.post("/signup", async (request, response) => {
         {
             signUpLecturer(email, password, username, function(res) 
             {
-                if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+                if (res != successfulRequestResponse)
                 {
                     response.status(401).json({ "message": res });
                 }
