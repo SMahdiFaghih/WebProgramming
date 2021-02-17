@@ -45,15 +45,14 @@ app.post("/signup", async (request, response) => {
     {
         signUpStudent(email, password, username, function(res) 
         {
-            if (res != successfulRequestResponse)
+            if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
             {
-                response.status(401).json({ "message": res });
+                response.status(401).json(res);
             }
             else
             {
-                response.json({ "message": res });
-            }
-            response.json();
+                response.json(res);
+            }   
         });
     }
     else if (role == "lecturer")
