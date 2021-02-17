@@ -1,6 +1,6 @@
 export interface GetAllFormsRes {
-
-};
+    forms: FormData[]
+};  
 
 export interface GetUserFormsRes {
     forms : FormData[]
@@ -28,14 +28,14 @@ export interface CloseFormRes{
 
 export interface EditFormPayload{
     formId:number,
-    fields: EditFormField[]
+    fields: FormFieldData[]
 }
 
 export interface EditFormRes{
     
 }
 
-export interface EditFormField{
+export interface FormFieldData{
     field_name: string,
     data: string
 }
@@ -64,11 +64,18 @@ export interface CreateFormRes{
 }
 
 export interface GetFormByIDPayload{
-    formId:string,
+    formId:number,
 }
 
 export interface GetFormByIDRes{
-
+    formContent:{
+        description: string
+        form_id: number
+        lecturer_email: string
+        status: "Open" | "Closed"
+        title: string
+    },
+    fields: FormField[]
 }
 
 
@@ -78,4 +85,27 @@ export interface GetFormSubmitsPayload{
 
 export interface GetFormSubmitsRes{
     forms:[]
+}
+
+export interface FormSubmitState extends FormContent{
+    email:string
+}
+
+export interface SubmitFormPayload{
+    formId:number,
+    fields: FormFieldData[]
+}
+
+export interface SubmitFormRes{
+
+}
+
+export interface GetRequestsPayload{
+    formId: number,
+    student_email:string
+}
+
+export interface GetRequestsRes{
+    formId: number,
+    student_email:string
 }
