@@ -159,7 +159,7 @@ app.post("/user/edit", async (request, response) => {
     });
 });
 
-app.post("/user/getUserData", async (request, response) => {
+app.get("/user/getUserData", async (request, response) => {
     console.log("POST /user/getUserData");
     if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
     {
