@@ -3,15 +3,23 @@ export interface GetAllFormsRes {
 };
 
 export interface GetUserFormsRes {
-
+    forms : FormData[]
 };
+
+export interface FormData{
+    title: string,
+    description: string,
+    form_id: number,
+    lecturer_email: string,
+    status: string,
+}
 
 export interface Form{
 
 }
 
 export interface CloseFormPayload{
-    formId:string
+    formId: number,
 }
 
 export interface CloseFormRes{
@@ -19,7 +27,7 @@ export interface CloseFormRes{
 }
 
 export interface EditFormPayload{
-    formId:string,
+    formId:number,
     fields: EditFormField[]
 }
 
@@ -44,7 +52,7 @@ export interface FormContent{
 
 export interface FormField{
     field_name:string,
-    required: boolean,
+    required: boolean | number,
     type: FormFieldType,
     checklist_options?: string
 }
@@ -64,10 +72,10 @@ export interface GetFormByIDRes{
 }
 
 
-export interface GetAllSubmitsPayload{
-    formId:string,
+export interface GetFormSubmitsPayload{
+    formId:number,
 }
 
-export interface GetAllSubmitsRes{
-
+export interface GetFormSubmitsRes{
+    forms:[]
 }

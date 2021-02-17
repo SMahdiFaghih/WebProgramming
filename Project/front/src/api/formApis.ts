@@ -1,6 +1,7 @@
 import { BASE_URL } from "../config/config";
-import { CloseFormPayload, CloseFormRes, CreateFormPayload, CreateFormRes, EditFormPayload, EditFormRes, GetAllFormsRes, GetAllSubmitsPayload, GetAllSubmitsRes, GetFormByIDPayload, GetFormByIDRes, GetUserFormsRes } from "../types/form";
+import { CloseFormPayload, CloseFormRes, CreateFormPayload, CreateFormRes, EditFormPayload, EditFormRes, GetAllFormsRes, GetFormByIDPayload, GetFormByIDRes, GetFormSubmitsPayload, GetFormSubmitsRes, GetUserFormsRes } from "../types/form";
 import { EditUserPayload, EditUserRes } from "../types/user";
+import { getAuthHeader, handleErrors } from "../Utils/api.utils";
 
 class FormApi{
     async getAllForms(){
@@ -31,10 +32,12 @@ class FormApi{
         myHeaders.append("Content-Type", "application/json");
         return fetch(`${BASE_URL}/form/user`, {
             method: 'GET',
-            headers: myHeaders,
+            headers: getAuthHeader(),
             redirect: 'follow'
         })
-        .then(response => response.text() as GetUserFormsRes)
+        .then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as GetUserFormsRes)
     }
 
     async closeForm(payload: CloseFormPayload){
@@ -42,11 +45,12 @@ class FormApi{
         myHeaders.append("Content-Type", "application/json");
         return fetch(`${BASE_URL}/form/close`, {
             method: 'POST',
-            headers: myHeaders,
+            headers: getAuthHeader(),
             body: JSON.stringify(payload),
             redirect: 'follow'
-        })
-        .then(response => response.text() as CloseFormRes)
+        }).then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as CloseFormRes)
     }
 
     async editForm(payload: EditFormPayload){
@@ -74,68 +78,30 @@ class FormApi{
     }
 
     async createForm(payload: CreateFormPayload){
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
         return fetch(`${BASE_URL}/form/create`, {
             method: 'POST',
-            headers: myHeaders,
+            headers: getAuthHeader(),
             body: JSON.stringify(payload),
             redirect: 'follow'
         })
-        .then(response => response.text() as CreateFormRes)
+        .then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as CreateFormRes)
     }
 
-    async getAllSubmits(payload: GetAllSubmitsPayload){
+    async getFormSubmits(payload: GetFormSubmitsPayload){
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         return fetch(`${BASE_URL}/form/students`, {
             method: 'POST',
-            headers: myHeaders,
+            headers: getAuthHeader(),
             body: JSON.stringify(payload),
             redirect: 'follow'
-        })
-        .then(response => response.text() as GetAllSubmitsRes)
+        }) 
+        .then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as GetFormSubmitsRes)
     }
-
-
-
-
-    async resolveForm(payload: EditUserPayload){
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        return fetch(`${BASE_URL}/user/edit`, {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(payload),
-            redirect: 'follow'
-        })
-        .then(response => response.text() as EditUserRes)
-    }
-
-    async sendForm(payload: EditUserPayload){
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        return fetch(`${BASE_URL}/user/edit`, {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(payload),
-            redirect: 'follow'
-        })
-        .then(response => response.text() as EditUserRes)
-    }
-
-    async getRequestData(payload: EditUserPayload){
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        return fetch(`${BASE_URL}/user/edit`, {
-            method: 'POST',
-            headers: myHeaders,
-            body: JSON.stringify(payload),
-            redirect: 'follow'
-        })
-        .then(response => response.text() as EditUserRes)
-    }
-
 }
 
 export default FormApi;
