@@ -5,53 +5,78 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
+import { stat } from 'fs';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import UserApi from '../api/userApis';
 import '../styles/Auth.scss';
+import { SignupPayload } from '../types/user';
+
+
+const userApiService = new UserApi();
 
 function Signup() {
-    const [state , setState] = useState({
-        username:{ value:"", error:'' },
-        email :{ value:"", error:'' },
-        password : { value:"", error:'' },
-        role:{ value:"student", error:'' }
+    const [state , setState] = useState<SignupPayload>({
+        username:'',
+        email :'',
+        password :'',
+        role:'student'
+    })
+
+    const [error , setError] = useState({
+        username:'',
+        email :'',
+        password :'',
+        role:''
     })
 
     function handleChange(e:any){
         const {id, value} = e.target 
         setState(prevState => ({
             ...prevState,
-            [id] : {value, error: value ? '' : `${id} is required`}
-        }))
+            [id] : value
+        }));
+        setError(prevState => ({
+            ...prevState,
+            [id] : value ? '' : `${id} is required`
+        }));
     }
 
+    const history = useHistory();
     function onSubmit(e: React.FormEvent){
         e.preventDefault();
-        const error = Object.values(state).map(v => v.error).some(err=>!!err)
-                        || Object.values(state).map(v =>v.value).some(v=>!v)
-        if(error) return
-        console.log(state);
+        const hasError = Object.values(error).some(err=>!!err)
+                        || Object.values(state).some(v=>!v)
+        console.log(state)
+        if(hasError) return
+        userApiService.signup(state).then(data=>{
+            console.log(data)
+            // localStorage.setItem('Token', data.token)
+            history.push('/dashboard');
+        }).catch(e=>{
+            console.error(error)
+        })
     }
 
   return (
     <div className="Auth d-flex align-items-center justify-content-center">
         <div className="form-container">
-            <h2 className="mb-5">Web Project</h2>
+            <h2 className="mb-5">TForm</h2>
             <form className="mb-3 d-flex flex-column" onSubmit={onSubmit}>
-                <TextField className="mb-3" id="username" error={!!state.username.error} helperText={state.username.error} label="Username" variant="outlined" onChange={handleChange} />
-                <TextField className="mb-3" id="email" error={!!state.email.error} helperText={state.email.error} label="Email" variant="outlined" onChange={handleChange} />
-                <TextField className="mb-3" id="password" error={!!state.password.error}  helperText={state.password.error} label="Password" type="password" variant="outlined" onChange={handleChange}/>
+                <TextField className="mb-3" id="username" error={!!error.username} helperText={error.username} label="Username" type='text' variant="outlined" onChange={handleChange} />
+                <TextField className="mb-3" id="email" error={!!error.email} helperText={error.email} label="Email" type="email" variant="outlined" onChange={handleChange} />
+                <TextField className="mb-3" id="password" error={!!error.password}  helperText={error.password} label="Password" type="password" variant="outlined" onChange={handleChange}/>
                 <FormControl className="mb-3" onChange={handleChange}>
                     <FormLabel>Role</FormLabel>
                     <RadioGroup row aria-label="position" name="position" defaultValue="top" >
                         <FormControlLabel
                             value="student"
-                            control={<Radio id="role" checked={state.role.value === 'student'} color="primary" size="small" />}
+                            control={<Radio id="role" checked={state.role === 'student'} color="primary" size="small" />}
                             label="Student"
                         />
                         <FormControlLabel
                             value="lecturer"
-                            control={<Radio id="role" checked={state.role.value === 'lecturer'} color="primary" size="small" />}
+                            control={<Radio id="role" checked={state.role === 'lecturer'} color="primary" size="small" />}
                             label="Lecturer"
                         />
                     </RadioGroup>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
 function PrivateRoute({...rest }) {
-  const isLoggedIn = true;
+  const isLoggedIn = !!localStorage.getItem('Token');
   return (
     <>
       {isLoggedIn ? (
@@ -12,7 +12,7 @@ function PrivateRoute({...rest }) {
             render={({ location }) => (
               <Redirect
                 to={{
-                  pathname: '/signup',
+                  pathname: '/signin',
                   state: { from: location },
                 }}
               />

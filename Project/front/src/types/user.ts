@@ -17,7 +17,7 @@ export interface SigninPayload{
 }
 
 export interface SigninRes{
-
+    token:string
 }
 
 export interface EditUserPayload{

@@ -10,7 +10,7 @@ export interface AddFieldDialogProps {
   
 function AddFieldDialog(props: AddFieldDialogProps) {
     const { onClose, selectedValue, open } = props;
-    const [ newValue, setNewValue ] = selectedValue ? useState(selectedValue) : useState<FormField>({field_name:'', required: true, type:"TextField"})
+    const [ newValue, setNewValue ] = useState<FormField>(selectedValue ||{field_name:'', required: true, type:"TextField"});
 
 
     const handleClose = () => {
@@ -33,14 +33,14 @@ function AddFieldDialog(props: AddFieldDialogProps) {
                 className="mb-3"
                 autoFocus
                 id="field_name"
-                label="Name"
+                label="Filed Name"
                 type="text"
                 fullWidth
                 onChange={handleChange}
            />
             <FormGroup>
                 <FormControlLabel
-                    control={<Checkbox checked={newValue.required} id="required" onChange={handleChange} name="required" />}
+                    control={<Checkbox checked={!!newValue.required} id="required" onChange={handleChange} name="required" />}
                     label="Required"
                 />
             </FormGroup>

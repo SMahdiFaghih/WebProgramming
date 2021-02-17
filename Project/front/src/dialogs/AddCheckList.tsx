@@ -50,7 +50,7 @@ function AddCheckListDialog(props: AddChecklistDialogProps) {
             />
             <FormGroup>
                 <FormControlLabel
-                    control={<Checkbox checked={newValue.required} id="required" onChange={handleChange} name="required" />}
+                    control={<Checkbox checked={!!newValue.required} id="required" onChange={handleChange} name="required" />}
                     label="Required"
                 />
             </FormGroup>
