@@ -133,7 +133,7 @@ function CreateForm() {
                         </Button>
                         <AddCheckListDialog open={openAddCheckListDialog} onClose={addCheckList}></AddCheckListDialog>
                     </div>
-                    <Button variant="contained" type="submit" color="primary">Submit Form</Button>
+                    <Button  className="align-self-start" variant="contained" type="submit" color="primary">Submit Form</Button>
                 </form> 
             </div>
         </div> 
