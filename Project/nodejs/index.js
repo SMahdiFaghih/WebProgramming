@@ -876,7 +876,7 @@ function getAllForms(callback)
 
 function getStudentData(email, callback)
 {
-    con.query('SELECT * FROM student WHERE email = ?', [con.escape(email)], function (err, result) 
+    con.query('SELECT email, username FROM student WHERE email = ?', [con.escape(email)], function (err, result) 
     {
         if (err)
         {
@@ -890,7 +890,7 @@ function getStudentData(email, callback)
 
 function getLecturerData(email, callback)
 {
-    con.query('SELECT * FROM lecturer WHERE email = ?', [con.escape(email)], function (err, result) 
+    con.query('SELECT email, username FROM lecturer WHERE email = ?', [con.escape(email)], function (err, result) 
     {
         if (err)
         {
