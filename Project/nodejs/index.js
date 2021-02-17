@@ -159,6 +159,53 @@ app.post("/user/edit", async (request, response) => {
     });
 });
 
+app.post("/user/getUserData", async (request, response) => {
+    console.log("POST /user/getUserData");
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
+    const authenticationToken = request.headers.authorization.split(" ")[1];
+    jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
+    {
+        if (result == undefined)
+        {
+            response.status(407).json({ "message": "Authentication failed"});
+        }
+        else
+        {
+            if (result.role == "student")
+            {
+                getStudentData(result.email, function(res) 
+                {
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    }
+                }); 
+            }
+            else if (result.role == "lecturer")
+            {
+                getLecturerData(result.email, function(res) 
+                {
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    }
+                }); 
+            }
+        }
+    });
+});
+
 app.get("/form/all", async (request, response) => {
     console.log("GET /form/all");
     getAllForms( function(res) 
@@ -823,9 +870,32 @@ function getAllForms(callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-
         return callback({"forms": validateData(result)});
     });
+}
+
+function getStudentData(email, callback)
+{
+    con.query('SELECT * FROM student WHERE email = ?', [con.escape(email)], function (err, result) 
+    {
+        if (err)
+        {
+            return callback({"message": failedRequestResponse});
+        } 
+        return callback(validateData(result));
+    }); 
+}   
+
+function getLecturerData(email, callback)
+{
+    con.query('SELECT * FROM lecturer WHERE email = ?', [con.escape(email)], function (err, result) 
+    {
+        if (err)
+        {
+            return callback({"message": failedRequestResponse});
+        } 
+        return callback(validateData(result));
+    });    
 }
 
 function editStudent(email, newPassword, newUsername, callback)
