@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormApi from '../api/formApis';
 import { FormData, GetUserFormsRes } from '../types/form';
+import { notif } from '../Utils/notification.utils';
 
 const formsService = new FormApi();
 
@@ -21,7 +22,9 @@ function FormsList() {
         .then((data)=>{
             setState(data)
         })
-        .catch(e=>console.error(e))
+        .catch(e=>{
+            notif('danger','Error', e.message)
+        })
     }
 
     function closeForm(formId:number){
@@ -29,7 +32,9 @@ function FormsList() {
         .then((data)=>{
             getForms();
         })
-        .catch(e=>console.error(e))
+        .catch(e=>{
+            notif('danger','Error', e.message)
+        })
     }
 
     const formActions = (f:FormData)=>{

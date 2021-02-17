@@ -11,6 +11,7 @@ import { Link, useHistory } from 'react-router-dom';
 import UserApi from '../api/userApis';
 import '../styles/Auth.scss';
 import { SignupPayload } from '../types/user';
+import { notif } from '../Utils/notification.utils';
 
 
 const userApiService = new UserApi();
@@ -56,10 +57,10 @@ function Signup() {
             .then(data=>{
                 localStorage.setItem('Role', JSON.stringify(data[0].role));
             }).catch(e=>{
-                console.error(e);
+                notif('danger','Error', e.message)
             })
         }).catch(e=>{
-            console.error(error)
+            notif('danger','Error', e.message)
         })
     }
 

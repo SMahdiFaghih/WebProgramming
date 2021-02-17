@@ -1,6 +1,7 @@
 import { Button, Divider, Icon, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import UserApi from '../api/userApis';
+import { notif } from '../Utils/notification.utils';
 
 const userApiService = new UserApi();
 
@@ -40,7 +41,7 @@ function Profile() {
               role: user.role
           })
       }).catch(e=>{
-          console.error(e);
+        notif('danger','Error', e.message)
       })
     }
 
@@ -65,7 +66,7 @@ function Profile() {
         .then(data=>{
             getUserData();
         }).catch(e=>{
-            console.error(e);
+            notif('danger','Error', e.message)
         })
     }
 

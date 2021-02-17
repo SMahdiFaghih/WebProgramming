@@ -15,6 +15,8 @@
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-notifications": "^1.7.2",
+    "react-notifications-component": "^3.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "react-toastify": "^7.0.3",
@@ -45,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-notifications-component": "^2.4.0",
     "@types/react-router-dom": "^5.1.7"
   }
 }

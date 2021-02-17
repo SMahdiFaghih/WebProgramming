@@ -5,6 +5,7 @@ import FormApi from '../api/formApis';
 import { default as AddCheckListDialog } from '../dialogs/AddCheckList';
 import AddFieldDialog from '../dialogs/AddField';
 import { FormContent, FormField } from '../types/form';
+import { notif } from '../Utils/notification.utils';
 
 const formsService = new FormApi();
 
@@ -34,7 +35,9 @@ function CreateForm() {
         .then((data)=>{
             history.push('/dashboard/forms-list')
         })
-        .catch(e=>console.error(e))
+        .catch(e=>{
+            notif('danger','Error', e.message)
+        })
     }
 
     function onSubmit(e: React.FormEvent){

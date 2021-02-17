@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormApi from '../api/formApis';
 import { GetFormSubmitsRes } from '../types/form';
+import { notif } from '../Utils/notification.utils';
 import { useQuery } from '../Utils/routing.utils';
 
 const formsService = new FormApi();
@@ -19,14 +20,16 @@ function SubmitList() {
   function getFormSubmits(){
     const formId = query.get('id');
     if(!formId) {
-        console.error('we must have formId in them params')
+        notif('danger','Error','we must have formId in them params' )
         return;
       }
     formsService.getFormSubmits({formId: Number(formId)})
     .then((data)=>{
         setState(data)
     })
-    .catch(e=>console.error(e))
+    .catch(e=>{
+      notif('danger','Error', e.message)
+    })
   }
 
   return (

@@ -6,13 +6,13 @@ import Signin from './views/Signin';
 import Signup from './views/Signup';
 import Dashboard from './views/Dashboard';
 import PrivateRoute from './AuthGuard';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 function App() {
-  const notify = () => toast("Wow so easy!");
   return (
     <div className="App">
+      <ReactNotification />
       <Router>
         <Switch>
           <Route path="/signup" component={Signup} />
@@ -20,8 +20,6 @@ function App() {
           <PrivateRoute path="/dashboard" component={Dashboard}></PrivateRoute>
         </Switch>
       </Router>
-      <button onClick={notify}>Notify!</button>
-      <ToastContainer />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FormApi from '../api/formApis';
 import { GetAllFormsRes } from '../types/form';
+import { notif } from '../Utils/notification.utils';
 
 const formsService = new FormApi();
 
@@ -21,7 +22,9 @@ function AllForms() {
         .then((data)=>{
             setState(data)
         })
-        .catch(e=>console.error(e))
+        .catch(e=>{
+            notif('danger','Error', e.message)
+        })
     }
 
     const searchForm = (e: any) =>{
@@ -34,7 +37,9 @@ function AllForms() {
         .then(data=>{
             setState(data)
         })
-        .catch(e=>console.error(e))
+        .catch(e=>{
+            notif('danger','Error', e.message)
+        })
     }
 
     return (

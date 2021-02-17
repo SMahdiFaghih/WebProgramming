@@ -2,9 +2,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
 import UserApi from '../api/userApis';
 import '../styles/Auth.scss';
+import { notif } from '../Utils/notification.utils';
 
 const userApiService = new UserApi();
 
@@ -47,11 +47,10 @@ function Signin() {
                 console.log(data[0]);
                 localStorage.setItem('Role', JSON.stringify(data[0].role));
             }).catch(e=>{
-                console.error(e);
+                notif('danger','Error', e.message)
             })
         }).catch(e=>{
-            console.log('hbjnmjhnm')
-            return toast(e,{type:'error'})
+            notif('danger','Error', e.message)
         })
     }
 
@@ -66,7 +65,6 @@ function Signin() {
             </form> 
             <div className="relocate">if you haven't signed up click <Link to="/signup">here</Link></div>
         </div>
-        <ToastContainer />
     </div>
   );
 }
