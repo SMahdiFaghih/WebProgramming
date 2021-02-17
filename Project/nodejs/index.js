@@ -68,24 +68,29 @@ app.post("/signin", async (request, response) => {
     console.log("POST /signin");
     const email = request.body.email;
     const password = request.body.password;
+    const role = request.body.role;
     if (!isEmailValid(email))
     {
         response.status(400).json({ "message": "Email is not valid"});
     }
+    if (role == "student")
+    {
+        signInStudent(email, password, function(res) 
+        {
+            response.json(res);
+        });
+    }
+    else if (role == "lecturer")
+    {
+        signInLecturer(email, password, function(res) 
+        {
+            response.json(res);
+        });
+    }
     else
     {
-        signIn(email, password, function(res) 
-        {
-            if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
-            {
-                response.status(401).json(res);
-            }
-            else
-            {
-                response.json(res);
-            }
-        }); 
-    }     
+        response.status(400).json({ "message": "Role is invalid"});
+    }
 });
 
 app.post("/user/edit", async (request, response) => {
@@ -652,7 +657,7 @@ function editLecturer(email, newPassword, newUsername, callback)
     });    
 }
 
-function signIn(email, password, callback)
+function signInStudent(email, password, callback)
 {
     con.query('SELECT * FROM student WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
     {
@@ -662,25 +667,27 @@ function signIn(email, password, callback)
         } 
         if (result.length == 0)
         {
-            con.query('SELECT * FROM lecturer WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
-            {
-                if (err)
-                {
-                    return callback({"message": failedRequestResponse});
-                } 
-                if (result.length == 0)
-                {
-                    return callback({"message": "Email or password is incorrect"});
-                }
-                const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
-                return callback({"token": accessToken});
-            });
+            return callback({"message": "Email or password is incorrect for student"});
         }
-        else
+        const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
+        return callback({"token": accessToken});
+    });
+}
+
+function signInLecturer(email, password, callback)
+{
+    con.query('SELECT * FROM lecturer WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
+    {
+        if (err)
         {
-            const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
-            return callback({"token": accessToken});
+            return callback({"message": failedRequestResponse});
+        } 
+        if (result.length == 0)
+        {
+            return callback({"message": "Email or password is incorrect for lecturer"});
         }
+        const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
+        return callback({"token": accessToken});
     });
 }
 
