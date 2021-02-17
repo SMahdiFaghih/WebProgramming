@@ -1,2 +1,12 @@
 @import './styles/Landing.scss';
-@import './styles/Dashboard.scss'
+@import './styles/Dashboard.scss';
+
+
+.text-link {
+    color: inherit;
+    text-decoration: inherit;
+    &:focus, &:hover, &:visited, &:link, &:active {
+        color: inherit;
+        text-decoration: inherit;
+    }
+}

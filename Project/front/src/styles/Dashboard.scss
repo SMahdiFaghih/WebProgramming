@@ -19,6 +19,7 @@ $sidebar-width : 250px;
         .sidebar-item{
             display: flex;
             padding: 15px;
+            padding-left: 25px;
             margin-bottom:5px;
             &:last-child{
                 margin-bottom: 0px;

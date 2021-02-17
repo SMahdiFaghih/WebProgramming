@@ -9,14 +9,14 @@ app.use(express.json());
 const jwt = require("jsonwebtoken");
 const accessTokenSecret = 'youraccesstokensecret';
 
-const port = 3000;
+const port = 8000;
 
 LecturerEmails = ["aabaam@gmail.com", "mrbahrami@gmail.com"]
 
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "<yourPassword>",
+    password: "5et422yh",
     database: "web_project",
     multipleStatements: true,
 });
