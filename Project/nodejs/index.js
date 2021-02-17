@@ -25,6 +25,7 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
+createIndexes();
 
 app.post("/signup", async (request, response) => {
     console.log("POST /signup");
@@ -851,6 +852,18 @@ function signUpLecturer(email, password, username, callback)
             return callback(successfulRequestResponse);
         });
     });
+}
+
+function createIndexes()
+{
+    con.query("CREATE INDEX index_username ON lecturer (username);", function(err)
+    {
+        console.log("Index index_username created");
+    });  
+    con.query("CREATE INDEX index_title ON form (title);", function(err)
+    {
+        console.log("Index index_title created");
+    });      
 }
 
 function createDatabase()
