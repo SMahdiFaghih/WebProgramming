@@ -66,15 +66,14 @@ app.post("/signup", async (request, response) => {
         {
             signUpLecturer(email, password, username, function(res) 
             {
-                if (res != successfulRequestResponse)
+                if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
                 {
-                    response.status(401).json({ "message": res });
+                    response.status(401).json(res);
                 }
                 else
                 {
-                    response.json({ "message": res });
+                    response.json(res);
                 }
-                response.json();
             });
         }
     }
@@ -814,19 +813,20 @@ function signUpStudent(email, password, username, callback)
     {
         if (err)
         {
-            return callback(failedRequestResponse);
+            return callback({"message": failedRequestResponse});
         } 
         if (result.length != 0)
         {
-            return callback("Student exists with this email");
+            return callback({"message": "Student exists with this email"});
         }
         con.query('INSERT INTO student SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
         {
             if (err)
             {
-                return callback(failedRequestResponse);
+                return callback({"message": failedRequestResponse});
             } 
-            return callback(successfulRequestResponse);
+            const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
+            return callback({"token": accessToken});
         });
     });
 }
@@ -837,19 +837,20 @@ function signUpLecturer(email, password, username, callback)
     {
         if (err)
         {
-            return callback(failedRequestResponse);
+            return callback({"message": failedRequestResponse});
         } 
         if (result.length != 0)
         {
-            return callback("Lecturer exists with this email");
+            return callback({"message": "Lecturer exists with this email"});
         }
         con.query('INSERT INTO lecturer SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
         {
             if (err)
             {
-                return callback(failedRequestResponse);
+                return callback({"message": failedRequestResponse});
             } 
-            return callback(successfulRequestResponse);
+            const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
+                return callback({"token": accessToken});
         });
     });
 }
