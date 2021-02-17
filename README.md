@@ -1,6 +1,12 @@
 # WebProgramming
 WebProgramming Project and HomeWorks (99 Fall semester)
 
+# Project
+The project is a website that can be used by lecturers to create forms such as TA forms and students can fill the forms.
+Frontend: HTML, CSS, JS
+Backend: Nodejs
+Database: Mysql
+
 # Assignment 1
   this is a simple program to undrestand basics of web programming
   
