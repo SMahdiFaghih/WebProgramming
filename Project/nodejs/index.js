@@ -672,7 +672,7 @@ function getEmptyFormData(form_id, callback)
             return callback({"message": failedRequestResponse});
         }
         emptyFormData = {"formContent": validateData(result[0])};
-        con.query('SELECT * FROM form_fields WHERE form_id = ?', [form_id], function (err, result) 
+        con.query('SELECT * FROM form_fields WHERE form_id = ? ORDER BY id', [form_id], function (err, result) 
         {
             if (err)
             {
@@ -698,7 +698,7 @@ function getFormStudents(form_id, lecturer_email, callback)
 
 function getFilledFormData(form_id, student_email, callback)
 {
-    con.query('SELECT * FROM filled_forms_data WHERE student_email = ? AND form_id = ?', [con.escape(student_email), form_id], function (err, result, fields) 
+    con.query('SELECT * FROM filled_forms_data WHERE student_email = ? AND form_id = ? ORDER BY id', [con.escape(student_email), form_id], function (err, result, fields) 
     {
         if (err)
         {
@@ -781,7 +781,7 @@ function fillForm(form_id, student_email, fields, callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        con.query('INSERT INTO filled_forms_data (form_id, student_email, field_name, data) VALUES ?', [fields.map(item => [form_id, con.escape(student_email), con.escape(item.field_name), con.escape(item.data)])], function (err, result) 
+        con.query('INSERT INTO filled_forms_data (form_id, student_email, field_name, data, id) VALUES ?', [fields.map(item => [form_id, con.escape(student_email), con.escape(item.field_name), con.escape(item.data), con.escape(item.id)])], function (err, result) 
         {
             if (err)
             {
@@ -814,11 +814,11 @@ function createForm(lecturer_email, title, description, fields, callback)
             return callback({"message": failedRequestResponse});
         } 
         form_id = result.insertId;
-        console.log(form_id);
-        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, con.escape(item.field_name), con.escape(item.required), item.type, con.escape(item.checklist_options)])], function (err, result) 
+        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options, id) VALUES ?', [fields.map(item => [form_id, con.escape(item.field_name), con.escape(item.required), item.type, con.escape(item.checklist_options), con.escape(item.id)])], function (err, result) 
         {
             if (err)
             {
+                console.log(err);
                 return callback({"message": failedRequestResponse});
             } 
             return callback({"message": successfulRequestResponse});
@@ -1097,7 +1097,7 @@ function createDatabase()
                     console.log("Table form created");
                 } 
             });
-            con.query("CREATE TABLE IF NOT EXISTS form_fields (form_id INT NOT NULL, field_name VARCHAR(128) NOT NULL, required TINYINT(1) NOT NULL, type ENUM ('TextField' , 'CheckList') NOT NULL, checklist_options VARCHAR(256), PRIMARY KEY (form_id, field_name), FOREIGN KEY (form_id) references form (form_id) on delete cascade on update cascade)", function(err)
+            con.query("CREATE TABLE IF NOT EXISTS form_fields (form_id INT NOT NULL, field_name VARCHAR(128) NOT NULL, required TINYINT(1) NOT NULL, type ENUM ('TextField' , 'CheckList') NOT NULL, checklist_options VARCHAR(256), id INT NOT NULL, PRIMARY KEY (form_id, field_name), FOREIGN KEY (form_id) references form (form_id) on delete cascade on update cascade)", function(err)
             {
                 if (err)
                 {
@@ -1119,7 +1119,7 @@ function createDatabase()
                     console.log("Table filled_forms created");
                 } 
             });
-            con.query("CREATE TABLE IF NOT EXISTS filled_forms_data (form_id INT NOT NULL, student_email VARCHAR(128) NOT NULL, field_name VARCHAR(128) NOT NULL, data VARCHAR(512), PRIMARY KEY (form_id, student_email, field_name), FOREIGN KEY (student_email) references student (email) on delete cascade on update cascade, FOREIGN KEY (form_id, field_name) references form_fields (form_id, field_name) on delete cascade on update cascade)", function(err)
+            con.query("CREATE TABLE IF NOT EXISTS filled_forms_data (form_id INT NOT NULL, student_email VARCHAR(128) NOT NULL, field_name VARCHAR(128) NOT NULL, data VARCHAR(512), id INT NOT NULL, PRIMARY KEY (form_id, student_email, field_name), FOREIGN KEY (student_email) references student (email) on delete cascade on update cascade, FOREIGN KEY (form_id, field_name) references form_fields (form_id, field_name) on delete cascade on update cascade)", function(err)
             {
                 if (err)
                 {
