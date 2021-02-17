@@ -25,6 +25,7 @@ var successfulRequestResponse = "OK";
 var failedRequestResponse = "Error";
 
 createDatabase();
+createIndexes();
 
 app.post("/signup", async (request, response) => {
     console.log("POST /signup");
@@ -61,18 +62,21 @@ app.post("/signup", async (request, response) => {
         {
             response.status(400).json({ "message": "Lecturer email not existed at all!"});
         }
-        signUpLecturer(email, password, username, function(res) 
+        else
         {
-            if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+            signUpLecturer(email, password, username, function(res) 
             {
-                response.status(401).json({ "message": res });
-            }
-            else
-            {
-                response.json({ "message": res });
-            }
-            response.json();
-        });
+                if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+                {
+                    response.status(401).json({ "message": res });
+                }
+                else
+                {
+                    response.json({ "message": res });
+                }
+                response.json();
+            });
+        }
     }
     else
     {
@@ -503,7 +507,6 @@ app.post("/form/students", async (request, response) => {
 app.post("/form/emptyFormData", async (request, response) => {
     console.log("POST /form/emptyFormData");
     const formId = request.body.formId;
-    const lecturer_email = request.body.lecturer_email;
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -513,7 +516,7 @@ app.post("/form/emptyFormData", async (request, response) => {
         }
         else
         {
-            getEmptyFormData(formId, lecturer_email, function(res) 
+            getEmptyFormData(formId, function(res) 
             {
                 if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
                 {
@@ -534,10 +537,10 @@ function isEmailValid(email)
     return regex.test(String(email).toLowerCase());
 }
 
-function getEmptyFormData(form_id, lecturer_email, callback)
+function getEmptyFormData(form_id, callback)
 {
     var emptyFormData;
-    con.query('SELECT * FROM form WHERE form_id = ? AND lecturer_email = ? AND status = "Open" LIMIT 1', [form_id, lecturer_email], function (err, result, fields) 
+    con.query('SELECT * FROM form WHERE form_id = ? AND status = "Open" LIMIT 1', [form_id], function (err, result, fields) 
     {
         if (err)
         {
@@ -849,6 +852,18 @@ function signUpLecturer(email, password, username, callback)
             return callback(successfulRequestResponse);
         });
     });
+}
+
+function createIndexes()
+{
+    con.query("CREATE INDEX index_username ON lecturer (username);", function(err)
+    {
+        console.log("Index index_username created");
+    });  
+    con.query("CREATE INDEX index_title ON form (title);", function(err)
+    {
+        console.log("Index index_title created");
+    });      
 }
 
 function createDatabase()
