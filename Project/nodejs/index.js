@@ -35,11 +35,11 @@ app.post("/signup", async (request, response) => {
     const role = request.body.role;
     if (!isEmailValid(email))
     {
-        response.status(400).json({ "message": "Email is not valid"});
+        return response.status(400).json({ "message": "Email is not valid"});
     }
     if (password.length < 8)
     {
-        response.status(400).json({ "message": "Password must contain at least 8 characters."});
+        return response.status(400).json({ "message": "Password must contain at least 8 characters."});
     }
     if (role == "student")
     {
@@ -112,7 +112,7 @@ app.post("/user/edit", async (request, response) => {
     const newUsername = request.body.newUsername;
     if (newPassword.length < 8)
     {
-        response.status(400).json({ "message": "Password must contain at least 8 characters."});
+        return response.status(400).json({ "message": "Password must contain at least 8 characters."});
     }
     if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
     {
