@@ -66,15 +66,14 @@ app.post("/signup", async (request, response) => {
         {
             signUpLecturer(email, password, username, function(res) 
             {
-                if (res != successfulRequestResponse)
+                if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
                 {
-                    response.status(401).json({ "message": res });
+                    response.status(401).json(res);
                 }
                 else
                 {
-                    response.json({ "message": res });
+                    response.json(res);
                 }
-                response.json();
             });
         }
     }
@@ -115,6 +114,10 @@ app.post("/user/edit", async (request, response) => {
     if (newPassword.length < 8)
     {
         response.status(400).json({ "message": "Password must contain at least 8 characters."});
+    }
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
@@ -174,6 +177,10 @@ app.get("/form/all", async (request, response) => {
 
 app.get("/form/user", async (request, response) => {
     console.log("GET /form/user");
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -236,6 +243,10 @@ app.post("/form/create", async (request, response) => {
     const title = request.body.formContent.title;
     const description = request.body.formContent.description;
     const fields = request.body.formContent.fields;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -270,7 +281,15 @@ app.post("/form/create", async (request, response) => {
 app.post("/form/close", async (request, response) => {
     console.log("POST /form/closee");
     const formId = request.body.formId;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -305,7 +324,15 @@ app.post("/form/send", async (request, response) => {
     console.log("POST /form/send");
     const formId = request.body.formId;
     const fields = request.body.fields;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -340,7 +367,15 @@ app.post("/form/edit", async (request, response) => {
     console.log("POST /form/edit");
     const formId = request.body.formId;
     const fields = request.body.fields;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -374,7 +409,15 @@ app.post("/form/edit", async (request, response) => {
 app.delete("/form/delete", async (request, response) => {
     console.log("DELETE /form/delete");
     const formId = request.query.id;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -410,7 +453,15 @@ app.post("/form/resolve", async (request, response) => {
     const formId = request.body.formId;
     const student_email = request.body.student_email;
     const resolve = request.body.result;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -445,7 +496,15 @@ app.post("/form/filledFormData", async (request, response) => {
     console.log("POST /form/filledFormData");
     const formId = request.body.formId;
     const student_email = request.body.student_email;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -473,7 +532,15 @@ app.post("/form/students", async (request, response) => {
     console.log("POST /form/students");
     const formId = request.body.formId;
     const student_email = request.body.student_email;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -507,7 +574,15 @@ app.post("/form/students", async (request, response) => {
 app.post("/form/emptyFormData", async (request, response) => {
     console.log("POST /form/emptyFormData");
     const formId = request.body.formId;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
+    if (!isNaN(formId))
+    {
+        response.status(400).json({ "message": "formId must be a number"});
+    }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
         if (result == undefined)
@@ -557,7 +632,7 @@ function getEmptyFormData(form_id, callback)
             {
                 return callback({"message": failedRequestResponse});
             } 
-            emptyFormData["fields"] = result;
+            emptyFormData["fields"] = validateData(result);
             return callback(emptyFormData);
         }); 
     });
@@ -565,31 +640,31 @@ function getEmptyFormData(form_id, callback)
 
 function getFormStudents(form_id, lecturer_email, callback)
 {
-    con.query('SELECT ff.form_id, ff.student_email, ff.result FROM filled_forms AS ff JOIN form ON form.form_id = ff.form_id WHERE ff.form_id = ? AND lecturer_email = ?', [form_id, lecturer_email], function (err, result, fields) 
+    con.query('SELECT ff.form_id, ff.student_email, ff.result FROM filled_forms AS ff JOIN form ON form.form_id = ff.form_id WHERE ff.form_id = ? AND lecturer_email = ?', [form_id, con.escape(lecturer_email)], function (err, result, fields) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         }
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
 function getFilledFormData(form_id, student_email, callback)
 {
-    con.query('SELECT * FROM filled_forms_data WHERE student_email = ? AND form_id = ?', [student_email, form_id], function (err, result, fields) 
+    con.query('SELECT * FROM filled_forms_data WHERE student_email = ? AND form_id = ?', [con.escape(student_email), form_id], function (err, result, fields) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         }
-        return callback({"formContent": result});
+        return callback({"formContent": validateData(result)});
     });
 }
 
 function resolveForm(lecturer_email, student_email, form_id, result, callback)
 {
-    con.query('UPDATE filled_forms JOIN form ON form.form_id = filled_forms.form_id SET result = ? WHERE filled_forms.form_id = ? AND student_email = ? AND lecturer_email = ?', [result, form_id, student_email, lecturer_email], function (err, result, fields) 
+    con.query('UPDATE filled_forms JOIN form ON form.form_id = filled_forms.form_id SET result = ? WHERE filled_forms.form_id = ? AND student_email = ? AND lecturer_email = ?', [result, form_id, con.escape(student_email), con.escape(lecturer_email)], function (err, result, fields) 
     {
         if (err)
         {
@@ -601,7 +676,7 @@ function resolveForm(lecturer_email, student_email, form_id, result, callback)
 
 function deleteForm(form_id, student_email, callback)
 {
-    con.query('DELETE FROM filled_forms WHERE form_id = ? AND student_email = ? AND result = "Pending"', [form_id, student_email], function (err, result) 
+    con.query('DELETE FROM filled_forms WHERE form_id = ? AND student_email = ? AND result = "Pending"', [form_id, con.escape(student_email)], function (err, result) 
     {
         if (err)
         {
@@ -611,7 +686,7 @@ function deleteForm(form_id, student_email, callback)
         {
             return callback({"message": "This form is not Pending or not existed"});
         }
-        con.query('DELETE FROM filled_forms_data WHERE form_id = ? AND student_email = ?', [form_id, student_email], function (err, result) 
+        con.query('DELETE FROM filled_forms_data WHERE form_id = ? AND student_email = ?', [form_id, con.escape(student_email)], function (err, result) 
         {
             if (err)
             {
@@ -624,7 +699,7 @@ function deleteForm(form_id, student_email, callback)
 
 function editForm(form_id, student_email, fields, callback)
 {
-    con.query('SELECT result FROM filled_forms WHERE form_id = ? AND student_email = ? LIMIT 1', [form_id, student_email], function (err, result) 
+    con.query('SELECT result FROM filled_forms WHERE form_id = ? AND student_email = ? LIMIT 1', [form_id, con.escape(student_email)], function (err, result) 
     {
         if (err)
         {
@@ -634,7 +709,7 @@ function editForm(form_id, student_email, fields, callback)
         {
             return callback({"message": "You can't edit a form that is resolved"});
         } 
-        var updatedFields = fields.map(item => [item.data, form_id, student_email, item.field_name]);
+        var updatedFields = fields.map(item => [con.escape(item.data), form_id, con.escape(student_email), con.escape(item.field_name)]);
         var queries = '';
         updatedFields.forEach(function (item) 
         {
@@ -654,13 +729,13 @@ function editForm(form_id, student_email, fields, callback)
 
 function fillForm(form_id, student_email, fields, callback)
 {
-    con.query('INSERT IGNORE INTO filled_forms SET form_id = ?, student_email = ?, result = "Pending"', [form_id, student_email], function (err, result) 
+    con.query('INSERT IGNORE INTO filled_forms SET form_id = ?, student_email = ?, result = "Pending"', [form_id, con.escape(student_email)], function (err, result) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         } 
-        con.query('INSERT INTO filled_forms_data (form_id, student_email, field_name, data) VALUES ?', [fields.map(item => [form_id, student_email, item.field_name, item.data])], function (err, result) 
+        con.query('INSERT INTO filled_forms_data (form_id, student_email, field_name, data) VALUES ?', [fields.map(item => [form_id, con.escape(student_email), con.escape(item.field_name), con.escape(item.data)])], function (err, result) 
         {
             if (err)
             {
@@ -673,7 +748,7 @@ function fillForm(form_id, student_email, fields, callback)
 
 function closeForm(lecturer_email, form_id, callback)
 {
-    con.query('UPDATE form SET status = "Closed" WHERE form_id = ? AND lecturer_email = ?', [form_id, lecturer_email], function (err, result, fields) 
+    con.query('UPDATE form SET status = "Closed" WHERE form_id = ? AND lecturer_email = ?', [form_id, con.escape(lecturer_email)], function (err, result, fields) 
     {
         if (err)
         {
@@ -686,14 +761,14 @@ function closeForm(lecturer_email, form_id, callback)
 function createForm(lecturer_email, title, description, fields, callback)
 {
     var form_id;
-    con.query('INSERT INTO form SET lecturer_email = ?, title = ?, description = ?, status = "Open"', [lecturer_email, title, description], function (err, result) 
+    con.query('INSERT INTO form SET lecturer_email = ?, title = ?, description = ?, status = "Open"', [con.escape(lecturer_email), con.escape(title), con.escape(description)], function (err, result) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         } 
         form_id = result.insertId;
-        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, item.field_name, item.required, item.type, item.checklist_options])], function (err, result) 
+        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, con.escape(item.field_name), con.escape(item.required), con.escape(item.type), con.escape(item.checklist_options)])], function (err, result) 
         {
             if (err)
             {
@@ -706,37 +781,37 @@ function createForm(lecturer_email, title, description, fields, callback)
 
 function searchForms(content, callback)
 {
-    con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + content + "%", "%" + content + "%"], function (err, result, fields) 
+    con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + con.escape(content) + "%", "%" + con.escape(content) + "%"], function (err, result, fields) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
 function getLecturerForms(lecturerEmail, callback)
 {
-    con.query('SELECT * FROM form WHERE lecturer_email = ?', [lecturerEmail], function (err, result, fields) 
+    con.query('SELECT * FROM form WHERE lecturer_email = ?', [con.escape(lecturerEmail)], function (err, result, fields) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
 function getStudentForms(studentEmail, callback)
 {
-    con.query('SELECT * FROM filled_forms JOIN form ON form.form_id = filled_forms.form_id WHERE student_email = ?', [studentEmail], function (err, result, fields) 
+    con.query('SELECT * FROM filled_forms JOIN form ON form.form_id = filled_forms.form_id WHERE student_email = ?', [con.escape(studentEmail)], function (err, result, fields) 
     {
         if (err)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+        return callback({"forms": validateData(result)});
     });
 }
 
@@ -748,13 +823,14 @@ function getAllForms(callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback({"forms": result});
+
+        return callback({"forms": validateData(result)});
     });
 }
 
 function editStudent(email, newPassword, newUsername, callback)
 {
-    con.query('UPDATE student SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
+    con.query('UPDATE student SET password = ?, username = ? WHERE email = ?', [con.escape(newPassword), con.escape(newUsername), con.escape(email)], function (err, result) 
     {
         if (err)
         {
@@ -766,7 +842,7 @@ function editStudent(email, newPassword, newUsername, callback)
 
 function editLecturer(email, newPassword, newUsername, callback)
 {
-    con.query('UPDATE lecturer SET password = ?, username = ? WHERE email = ?', [newPassword, newUsername, email], function (err, result) 
+    con.query('UPDATE lecturer SET password = ?, username = ? WHERE email = ?', [con.escape(newPassword), con.escape(newUsername), con.escape(email)], function (err, result) 
     {
         if (err)
         {
@@ -778,7 +854,7 @@ function editLecturer(email, newPassword, newUsername, callback)
 
 function signIn(email, password, callback)
 {
-    con.query('SELECT * FROM student WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
+    con.query('SELECT * FROM student WHERE email = ? AND password = ? LIMIT 1', [con.escape(email), con.escape(password)], function (err, result, fields) 
     {
         if (err)
         {
@@ -786,7 +862,7 @@ function signIn(email, password, callback)
         } 
         if (result.length == 0)
         {
-            con.query('SELECT * FROM lecturer WHERE email = ? AND password = ? LIMIT 1', [email, password], function (err, result, fields) 
+            con.query('SELECT * FROM lecturer WHERE email = ? AND password = ? LIMIT 1', [con.escape(email), con.escape(password)], function (err, result, fields) 
             {
                 if (err)
                 {
@@ -810,48 +886,66 @@ function signIn(email, password, callback)
 
 function signUpStudent(email, password, username, callback)
 {
-    con.query('SELECT * FROM student WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
+    con.query('SELECT * FROM student WHERE email = ? LIMIT 1', [con.escape(email)], function (err, result, fields) 
     {
         if (err)
         {
-            return callback(failedRequestResponse);
+            return callback({"message": failedRequestResponse});
         } 
         if (result.length != 0)
         {
-            return callback("Student exists with this email");
+            return callback({"message": "Student exists with this email"});
         }
-        con.query('INSERT INTO student SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
+        con.query('INSERT INTO student SET email = ?, password = ?, username = ?', [con.escape(email), con.escape(password), con.escape(username)], function (err, result) 
         {
             if (err)
             {
-                return callback(failedRequestResponse);
+                return callback({"message": failedRequestResponse});
             } 
-            return callback(successfulRequestResponse);
+            const accessToken = jwt.sign({ email: email,  role: "student" }, accessTokenSecret);
+            return callback({"token": accessToken});
         });
     });
 }
 
 function signUpLecturer(email, password, username, callback)
 {
-    con.query('SELECT * FROM lecturer WHERE email = ? LIMIT 1', [email], function (err, result, fields) 
+    con.query('SELECT * FROM lecturer WHERE email = ? LIMIT 1', [con.escape(email)], function (err, result, fields) 
     {
         if (err)
         {
-            return callback(failedRequestResponse);
+            return callback({"message": failedRequestResponse});
         } 
         if (result.length != 0)
         {
-            return callback("Lecturer exists with this email");
+            return callback({"message": "Lecturer exists with this email"});
         }
-        con.query('INSERT INTO lecturer SET email = ?, password = ?, username = ?', [email, password, username], function (err, result) 
+        con.query('INSERT INTO lecturer SET email = ?, password = ?, username = ?', [con.escape(email), con.escape(password), con.escape(username)], function (err, result) 
         {
             if (err)
             {
-                return callback(failedRequestResponse);
+                return callback({"message": failedRequestResponse});
             } 
-            return callback(successfulRequestResponse);
+            const accessToken = jwt.sign({ email: email,  role: "lecturer" }, accessTokenSecret);
+                return callback({"token": accessToken});
         });
     });
+}
+
+function validateData(result)
+{
+    for (let i = 0; i < result.length; i++) 
+    {
+        var item = result[i];
+        Object.keys(item).forEach(function(key) 
+        {
+            if (key != "form_id")
+            {
+                item[key] = item[key].toString().split("'").join("");
+            }
+        });
+    }    
+    return result;
 }
 
 function createIndexes()
