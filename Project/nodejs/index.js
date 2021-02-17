@@ -1009,7 +1009,7 @@ function validateData(result)
         var item = result;
         Object.keys(item).forEach(function(key) 
         {
-            if (key != "form_id")
+            if (key != "form_id" && key != "required")
             {
                 item[key] = item[key].toString().split("'").join("");
             }
@@ -1021,7 +1021,7 @@ function validateData(result)
         var item = result[i];
         Object.keys(item).forEach(function(key) 
         {
-            if (key != "form_id")
+            if (key != "form_id" && key != "required")
             {
                 item[key] = item[key].toString().split("'").join("");
             }
