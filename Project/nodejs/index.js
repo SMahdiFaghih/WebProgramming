@@ -761,7 +761,7 @@ function closeForm(lecturer_email, form_id, callback)
 function createForm(lecturer_email, title, description, fields, callback)
 {
     var form_id;
-    con.query('INSERT INTO form SET lecturer_email = ?, title = ?, description = ?, status = "Open"', [con.escape(lecturer_email), con.escape(title), con.escape(description)], function (err, result) 
+    con.query('INSERT IGNORE INTO form SET lecturer_email = ?, title = ?, description = ?, status = "Open"', [con.escape(lecturer_email), con.escape(title), con.escape(description)], function (err, result) 
     {
         if (err)
         {
@@ -1005,7 +1005,7 @@ function createDatabase()
                     console.log("Table lecturer created");
                 } 
             });
-            con.query("CREATE TABLE IF NOT EXISTS form (form_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, lecturer_email VARCHAR(128) NOT NULL, title VARCHAR(128) NOT NULL, description VARCHAR(2048) NOT NULL, status ENUM ('Open' , 'Closed') NOT NULL, FOREIGN KEY (lecturer_email) references lecturer (email) on delete cascade on update cascade)", function(err)
+            con.query("CREATE TABLE IF NOT EXISTS form (form_id INT NOT NULL AUTO_INCREMENT UNIQUE, lecturer_email VARCHAR(128) NOT NULL, title VARCHAR(128) NOT NULL, description VARCHAR(2048) NOT NULL, status ENUM ('Open' , 'Closed') NOT NULL, PRIMARY KEY (lecturer_email, title), FOREIGN KEY (lecturer_email) references lecturer (email) on delete cascade on update cascade)", function(err)
             {
                 if (err)
                 {
