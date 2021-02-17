@@ -44,7 +44,15 @@ app.post("/signup", async (request, response) => {
     {
         signUpStudent(email, password, username, function(res) 
         {
-            response.json({ "message": res });
+            if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+            {
+                response.status(401).json({ "message": res });
+            }
+            else
+            {
+                response.json({ "message": res });
+            }
+            response.json();
         });
     }
     else if (role == "lecturer")
@@ -55,7 +63,15 @@ app.post("/signup", async (request, response) => {
         }
         signUpLecturer(email, password, username, function(res) 
         {
-            response.json({ "message": res });
+            if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+            {
+                response.status(401).json({ "message": res });
+            }
+            else
+            {
+                response.json({ "message": res });
+            }
+            response.json();
         });
     }
     else
@@ -109,14 +125,28 @@ app.post("/user/edit", async (request, response) => {
             {
                 editStudent(result.email, newPassword, newUsername, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    }
                 }); 
             }
             else if (result.role == "lecturer")
             {
                 editLecturer(result.email, newPassword, newUsername, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    }
                 }); 
             }
         }
@@ -127,7 +157,14 @@ app.get("/form/all", async (request, response) => {
     console.log("GET /form/all");
     getAllForms( function(res) 
     {
-        response.json(res);
+        if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+        {
+            response.status(401).json(res);
+        }
+        else
+        {
+            response.json(res);
+        }           
     }); 
 });
 
@@ -146,14 +183,28 @@ app.get("/form/user", async (request, response) => {
             {
                 getStudentForms(result.email, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else if (result.role == "lecturer")
             {
                 getLecturerForms(result.email, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
         }
@@ -165,7 +216,14 @@ app.post("/form/search", async (request, response) => {
     var content = request.body.content;
     searchForms(content, function(res) 
     {
-        response.json(res);
+        if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+        {
+            response.status(401).json(res);
+        }
+        else
+        {
+            response.json(res);
+        } 
     });
 });
 
@@ -187,7 +245,14 @@ app.post("/form/create", async (request, response) => {
             {
                 createForm(result.email, title, description, fields, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else
@@ -214,7 +279,14 @@ app.post("/form/close", async (request, response) => {
             {
                 closeForm(result.email, formId, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else
@@ -242,7 +314,14 @@ app.post("/form/send", async (request, response) => {
             {
                 fillForm(formId, result.email, fields, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else
@@ -270,7 +349,14 @@ app.post("/form/edit", async (request, response) => {
             {
                 editForm(formId, result.email, fields, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else
@@ -297,7 +383,14 @@ app.delete("/form/delete", async (request, response) => {
             {
                 deleteForm(formId, result.email, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else
@@ -326,7 +419,14 @@ app.post("/form/resolve", async (request, response) => {
             {
                 resolveForm(result.email, student_email, formId, resolve, function(res) 
                 {
-                    response.json(res);
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
                 }); 
             }
             else
@@ -352,7 +452,14 @@ app.post("/form/filledFormData", async (request, response) => {
         {
             getFilledFormData(formId, student_email, function(res) 
             {
-                response.json(res);
+                if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                {
+                    response.status(401).json(res);
+                }
+                else
+                {
+                    response.json(res);
+                } 
             });    
         }
     });
@@ -374,9 +481,16 @@ app.post("/form/students", async (request, response) => {
             if (result.role == "lecturer")
             {
                 getFormStudents(formId, result.email, function(res) 
-            {
-                response.json(res);
-            });   
+                {
+                    if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                    {
+                        response.status(401).json(res);
+                    }
+                    else
+                    {
+                        response.json(res);
+                    } 
+                });   
             }
             else
             {
@@ -401,7 +515,14 @@ app.post("/form/emptyFormData", async (request, response) => {
         {
             getEmptyFormData(formId, lecturer_email, function(res) 
             {
-                response.json(res);
+                if (res.hasOwnProperty("message") && res.message != successfulRequestResponse)
+                {
+                    response.status(401).json(res);
+                }
+                else
+                {
+                    response.json(res);
+                } 
             });    
         }
     });
