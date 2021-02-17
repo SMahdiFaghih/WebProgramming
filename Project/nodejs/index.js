@@ -160,7 +160,7 @@ app.post("/user/edit", async (request, response) => {
 });
 
 app.get("/user/getUserData", async (request, response) => {
-    console.log("POST /user/getUserData");
+    console.log("GET /user/getUserData");
     if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
     {
         return response.status(407).json({ "message": "Authentication failed"});
@@ -882,7 +882,9 @@ function getStudentData(email, callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback(validateData(result));
+        result = validateData(result)
+        result[0]["role"] = "student";
+        return callback(result);
     }); 
 }   
 
@@ -894,7 +896,9 @@ function getLecturerData(email, callback)
         {
             return callback({"message": failedRequestResponse});
         } 
-        return callback(validateData(result));
+        result = validateData(result)
+        result[0]["role"] = "lecturer";
+        return callback(result);
     });    
 }
 
