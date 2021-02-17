@@ -768,7 +768,8 @@ function createForm(lecturer_email, title, description, fields, callback)
             return callback({"message": failedRequestResponse});
         } 
         form_id = result.insertId;
-        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, con.escape(item.field_name), con.escape(item.required), con.escape(item.type), con.escape(item.checklist_options)])], function (err, result) 
+        console.log(form_id);
+        con.query('INSERT INTO form_fields (form_id, field_name, required, type, checklist_options) VALUES ?', [fields.map(item => [form_id, con.escape(item.field_name), con.escape(item.required), item.type, con.escape(item.checklist_options)])], function (err, result) 
         {
             if (err)
             {
