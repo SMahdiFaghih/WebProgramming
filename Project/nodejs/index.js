@@ -286,9 +286,9 @@ app.post("/form/close", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -329,9 +329,9 @@ app.post("/form/send", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -372,9 +372,9 @@ app.post("/form/edit", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -414,9 +414,9 @@ app.delete("/form/delete", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -458,9 +458,9 @@ app.post("/form/resolve", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -501,9 +501,9 @@ app.post("/form/filledFormData", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -537,9 +537,9 @@ app.post("/form/students", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -579,9 +579,9 @@ app.post("/form/emptyFormData", async (request, response) => {
         return response.status(407).json({ "message": "Authentication failed"});
     }
     const authenticationToken = request.headers.authorization.split(" ")[1];
-    if (!isNaN(formId))
+    if (isNaN(formId))
     {
-        response.status(400).json({ "message": "formId must be a number"});
+        return response.status(400).json({ "message": "formId must be a number"});
     }
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
