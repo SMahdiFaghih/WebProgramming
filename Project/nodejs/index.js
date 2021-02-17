@@ -115,6 +115,10 @@ app.post("/user/edit", async (request, response) => {
     {
         response.status(400).json({ "message": "Password must contain at least 8 characters."});
     }
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -173,6 +177,10 @@ app.get("/form/all", async (request, response) => {
 
 app.get("/form/user", async (request, response) => {
     console.log("GET /form/user");
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -235,6 +243,10 @@ app.post("/form/create", async (request, response) => {
     const title = request.body.formContent.title;
     const description = request.body.formContent.description;
     const fields = request.body.formContent.fields;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     jwt.verify(authenticationToken, accessTokenSecret, function(err, result) 
     {
@@ -269,6 +281,10 @@ app.post("/form/create", async (request, response) => {
 app.post("/form/close", async (request, response) => {
     console.log("POST /form/closee");
     const formId = request.body.formId;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -308,6 +324,10 @@ app.post("/form/send", async (request, response) => {
     console.log("POST /form/send");
     const formId = request.body.formId;
     const fields = request.body.fields;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -347,6 +367,10 @@ app.post("/form/edit", async (request, response) => {
     console.log("POST /form/edit");
     const formId = request.body.formId;
     const fields = request.body.fields;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -385,6 +409,10 @@ app.post("/form/edit", async (request, response) => {
 app.delete("/form/delete", async (request, response) => {
     console.log("DELETE /form/delete");
     const formId = request.query.id;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -425,6 +453,10 @@ app.post("/form/resolve", async (request, response) => {
     const formId = request.body.formId;
     const student_email = request.body.student_email;
     const resolve = request.body.result;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -464,6 +496,10 @@ app.post("/form/filledFormData", async (request, response) => {
     console.log("POST /form/filledFormData");
     const formId = request.body.formId;
     const student_email = request.body.student_email;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -496,6 +532,10 @@ app.post("/form/students", async (request, response) => {
     console.log("POST /form/students");
     const formId = request.body.formId;
     const student_email = request.body.student_email;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
@@ -534,6 +574,10 @@ app.post("/form/students", async (request, response) => {
 app.post("/form/emptyFormData", async (request, response) => {
     console.log("POST /form/emptyFormData");
     const formId = request.body.formId;
+    if (request.headers.authorization == undefined || request.headers.authorization.split(" ").length < 2)
+    {
+        return response.status(407).json({ "message": "Authentication failed"});
+    }
     const authenticationToken = request.headers.authorization.split(" ")[1];
     if (!isNaN(formId))
     {
