@@ -61,18 +61,21 @@ app.post("/signup", async (request, response) => {
         {
             response.status(400).json({ "message": "Lecturer email not existed at all!"});
         }
-        signUpLecturer(email, password, username, function(res) 
+        else
         {
-            if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+            signUpLecturer(email, password, username, function(res) 
             {
-                response.status(401).json({ "message": res });
-            }
-            else
-            {
-                response.json({ "message": res });
-            }
-            response.json();
-        });
+                if (res.hasOwnProperty("message") && res != successfulRequestResponse)
+                {
+                    response.status(401).json({ "message": res });
+                }
+                else
+                {
+                    response.json({ "message": res });
+                }
+                response.json();
+            });
+        }
     }
     else
     {
