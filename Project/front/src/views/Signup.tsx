@@ -53,6 +53,7 @@ function Signup() {
         userApiService.signup(state).then(data=>{
             localStorage.setItem('Token', data.token)
             history.push('/dashboard');
+            window.location.reload()
             userApiService.getUser()
             .then(data=>{
                 localStorage.setItem('Role', JSON.stringify(data[0].role));

@@ -1,3 +1,5 @@
+import { types } from "util"
+
 export interface GetAllFormsRes {
     forms: FormData[]
 };  
@@ -12,6 +14,8 @@ export interface FormData{
     form_id: number,
     lecturer_email: string,
     status: string,
+    student_emai?:string,
+    result:string
 }
 
 export interface Form{
@@ -37,7 +41,8 @@ export interface EditFormRes{
 
 export interface FormFieldData{
     field_name: string,
-    data: string
+    data: string,
+    id:number
 }
 
 export interface CreateFormPayload{
@@ -84,9 +89,16 @@ export interface GetFormSubmitsPayload{
     formId:number,
 }
 
-export interface GetFormSubmitsRes{
-    forms:[]
+export interface GetFormSubmitsRes {
+    forms:Request[]
 }
+
+export interface Request{
+    form_id:number,
+    result:string,
+    student_email:string
+}
+
 
 export interface FormSubmitState extends FormContent{
     email:string
@@ -101,16 +113,31 @@ export interface SubmitFormRes{
 
 }
 
-export interface GetRequestsPayload{
+export interface GetRequestDataPayload{
     formId: number,
     student_email:string
 }
 
-export interface GetRequestsRes{
-    formId: number,
-    student_email:string
+export interface GetRequestDataRes{
+    formContent:{
+        form_id:number,
+        student_email:string,
+        field_name:string,
+        data:string,
+        id:number,
+    }[]
 }
 
 export interface  SearchFormsPayload{
     content: string
+}
+
+export interface ResolveRequestsPayload{
+    formId: number,
+    student_email:string,
+    result:"Accepted" | "Rejected"
+}
+
+export interface ResolveRequestsRes{
+
 }

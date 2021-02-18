@@ -115,9 +115,9 @@ function CreateForm() {
 
     return (
         <div className="CreateForm">
+            <h2>Create Form</h2>
             <div className="desciption mb-4">You Can create forms in here and establish them</div>
             <div className="form-container">
-                <h2 className="mb-4">Create Form</h2>
                 <form className="mb-3 d-flex flex-column" onSubmit={onSubmit}>
                     <TextField className="mb-3" id="title" error={!!error.title} helperText={error.title} label="Title" variant="outlined" onChange={handleChange} />
                     <TextField className="mb-3" id="description" error={!!error.description}  helperText={error.description} label="Description" variant="outlined"  multiline rows={4} onChange={handleChange}/>

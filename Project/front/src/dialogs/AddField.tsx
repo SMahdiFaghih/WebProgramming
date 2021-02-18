@@ -10,7 +10,7 @@ export interface AddFieldDialogProps {
   
 function AddFieldDialog(props: AddFieldDialogProps) {
     const { onClose, selectedValue, open } = props;
-    const [ newValue, setNewValue ] = useState<FormField>(selectedValue ||{field_name:'', required: true, type:"TextField"});
+    const [ newValue, setNewValue ] = useState<FormField>(selectedValue ||{id:0, field_name:'', required: true, type:"TextField"});
 
 
     const handleClose = () => {

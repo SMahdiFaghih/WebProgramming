@@ -42,6 +42,7 @@ function Signin() {
             console.log(data);
             localStorage.setItem('Token', data.token);
             history.push('/dashboard');
+            window.location.reload()
             userApiService.getUser()
             .then(data=>{
                 console.log(data[0]);

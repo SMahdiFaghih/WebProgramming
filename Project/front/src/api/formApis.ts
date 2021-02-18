@@ -1,5 +1,5 @@
 import { BASE_URL } from "../config/config";
-import { CloseFormPayload, CloseFormRes, CreateFormPayload, CreateFormRes, EditFormPayload, EditFormRes, GetAllFormsRes, GetFormByIDPayload, GetFormByIDRes, GetFormSubmitsPayload, GetFormSubmitsRes, GetRequestsPayload, GetRequestsRes, GetUserFormsRes, SearchFormsPayload, SubmitFormPayload, SubmitFormRes } from "../types/form";
+import { CloseFormPayload, CloseFormRes, CreateFormPayload, CreateFormRes, EditFormPayload, EditFormRes, GetAllFormsRes, GetFormByIDPayload, GetFormByIDRes, GetFormSubmitsPayload, GetFormSubmitsRes, GetRequestDataPayload, GetRequestDataRes, GetUserFormsRes, ResolveRequestsPayload, ResolveRequestsRes, SearchFormsPayload, SubmitFormPayload, SubmitFormRes } from "../types/form";
 import { getAuthHeader, getHeader, handleErrors } from "../Utils/api.utils";
 
 class FormApi{
@@ -119,7 +119,7 @@ class FormApi{
         .then(res=> JSON.parse(res) as GetFormSubmitsRes)
     }
 
-    async getRequests(payload: GetRequestsPayload){
+    async getRequestData(payload: GetRequestDataPayload){
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         return fetch(`${BASE_URL}/form/filledFormData`, {
@@ -130,7 +130,19 @@ class FormApi{
         }) 
         .then(handleErrors)
         .then(response => response.text())
-        .then(res=> JSON.parse(res) as GetRequestsRes)
+        .then(res=> JSON.parse(res) as GetRequestDataRes)
+    }
+
+    async resolveRequests(payload: ResolveRequestsPayload){
+        return fetch(`${BASE_URL}/form/resolve`, {
+            method: 'POST',
+            headers: getAuthHeader(),
+            body: JSON.stringify(payload),
+            redirect: 'follow'
+        }) 
+        .then(handleErrors)
+        .then(response => response.text())
+        .then(res=> JSON.parse(res) as ResolveRequestsRes)
     }
 }
 

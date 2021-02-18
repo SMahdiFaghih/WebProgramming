@@ -38,7 +38,7 @@ function FormsList() {
     }
 
     const formActions = (f:FormData)=>{
-        if(role === 'lecturer')
+        if(role === 'lecturer'){
             return( 
             <>
             <TableCell>
@@ -52,6 +52,18 @@ function FormsList() {
                 </IconButton>
             </TableCell>
             </>)
+        }
+        else{
+            return( 
+                <>
+                <TableCell>
+                    {f.lecturer_email}
+                </TableCell>
+                <TableCell >
+                    {f.result}
+                </TableCell>
+                </>)
+        }
     }
 
     const description = ()=>{
@@ -70,20 +82,37 @@ function FormsList() {
         }
     }
 
+    const tableHead = () =>{
+        if(role === 'lecturer'){
+           return( 
+            <>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+            </>
+           );
+        }else{
+            return(
+            <>
+                <TableCell>Lecturer Email</TableCell>
+                <TableCell>Result</TableCell>
+            </>
+            );
+        }
+    }
+
     return (
         <div className="forms-list">
             <h3 className="mb-3">My Forms</h3>
             {description()}
             <TableContainer component={Paper}>
-                <Table className="table" aria-label="forms table">
+                <Table className="table-form" aria-label="forms table">
                     <TableHead>
                     <TableRow>
                         <TableCell>No.</TableCell>
                         <TableCell>Title</TableCell>
                         <TableCell>Description</TableCell>
                         <TableCell>Status</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
+                        {tableHead()}
                     </TableRow>
                     </TableHead>
                     <TableBody>

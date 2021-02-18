@@ -59,7 +59,7 @@ function AllForms() {
                 />
             </FormControl>
             <TableContainer component={Paper}>
-                <Table className="table" aria-label="forms table">
+                <Table className="table-form" aria-label="forms table">
                     <TableHead>
                     <TableRow>
                         <TableCell>No.</TableCell>

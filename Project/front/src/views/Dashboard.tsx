@@ -13,6 +13,7 @@ import SubmitList from './SubmitList';
 function Dashboard() {
   const role = JSON.parse(localStorage.getItem('Role') as string)
   const lecturerSidebarItems = [
+    {title:'All Forms', icon:'all_inbox', link:'/dashboard/forms-all'},
     {title:'My Forms', icon:'assignment', link:'/dashboard/forms-list'},
     {title:'Create Form', icon:'border_color', link:'/dashboard/create-form'},
   ]
@@ -71,6 +72,7 @@ function Dashboard() {
           <Route path="/dashboard/create-form" component={CreateForm} />
           <Route path="/dashboard/submit-form" component={SubmitForm} />
           <Route path="/dashboard/submit-list" component={SubmitList} />
+          <Route path="/" component={AllForms} />
         </Switch>
     </div>
     </div>

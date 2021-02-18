@@ -10,7 +10,7 @@ export interface AddChecklistDialogProps {
   
 function AddCheckListDialog(props: AddChecklistDialogProps) {
     const { onClose, selectedValue, open } = props;
-    const [ newValue, setNewValue ] = useState<FormField>(selectedValue || {field_name:'', required: true, type:"CheckList", checklist_options:''}) 
+    const [ newValue, setNewValue ] = useState<FormField>(selectedValue || {id: 0, field_name:'', required: true, type:"CheckList", checklist_options:''}) 
 
 
     const handleClose = () => {
@@ -33,7 +33,7 @@ function AddCheckListDialog(props: AddChecklistDialogProps) {
                 className="mb-3"
                 autoFocus
                 id="field_name"
-                label="Name"
+                label="Field Name"
                 type="text"
                 fullWidth
                 onChange={handleChange}

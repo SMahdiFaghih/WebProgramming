@@ -41,10 +41,10 @@ function SubmitForm() {
                 fields: data.fields,
             })
             setSubmit(
-                data.fields.map(f=>({field_name:f.field_name, data:''}))
+                data.fields.map(f=>({field_name:f.field_name, data:'', id:f.id}))
             )
             setError(
-                data.fields.map(f=>({field_name:f.field_name, data:''}))
+                data.fields.map(f=>({field_name:f.field_name, data:'', id:f.id}))
             )
         })
         .catch(e=>{
@@ -59,6 +59,7 @@ function SubmitForm() {
             notif('danger','Error','we must have formId in them params' )
             return;
         }
+        console.log(submit)
         formsService.submitForm({formId: Number(formId),fields:submit})
         .then((data)=>{
             history.push('/dashboard/forms-list')
@@ -68,16 +69,15 @@ function SubmitForm() {
         })
     }
 
-    function handleChange(e:any){
+    function handleChange(e:any, index:number){
         const {id, value} = e.target 
-        console.log(e.target.type)
         if(e.target.type === 'checkbox'){
             // fill this
         }
         else{
             setSubmit(prevState => ([
                 ...prevState.filter(p=>p.field_name!==id),
-                {field_name:id,data: value} as FormFieldData
+                {field_name:id,data: value, id:Number(index)} as FormFieldData
             ]))
 
             setError(prevState => {
@@ -86,7 +86,7 @@ function SubmitForm() {
                 const err_msg = hasError? `${id} is required`: ''
                 return([
                     ...prevState.filter(p=>p.field_name!==id),
-                    {field_name:id, data: err_msg} as FormFieldData
+                    {field_name:id, data: err_msg, id:Number(index)} as FormFieldData
                 ])
             })
         }
@@ -96,7 +96,6 @@ function SubmitForm() {
     function onSubmit(e: React.FormEvent){
         e.preventDefault();
         const hasError = error.some(err=>!!err.data)
-        || submit.some(v=>!v.data)
         if(hasError) return
         submitForm();
     }
@@ -107,7 +106,7 @@ function SubmitForm() {
             const errorObj = error.filter(e=>e.field_name == f.field_name)[0];
             if(f.type === 'TextField'){
                 return(
-                <TextField id={f.field_name} className="mb-3" label={f.field_name}  error={!!errorObj?.data} helperText={errorObj?.data} variant="outlined" required={!!f.required} onChange={handleChange}/>);
+                <TextField id={f.field_name} className="mb-3" label={f.field_name}  error={!!errorObj?.data} helperText={errorObj?.data} variant="outlined" required={!!f.required} onChange={e=>handleChange(e, f.id)}/>);
             }
             else if(f.type === 'CheckList'){
                 const options = f.checklist_options!.split(',') as string[];
@@ -116,7 +115,7 @@ function SubmitForm() {
                     <FormLabel required={!!f.required} component="legend">{f.field_name}</FormLabel>
                     <FormGroup row>
                         {options.map((o, i) =>(
-                                <FormControlLabel control={<Checkbox defaultChecked={i === 0} id={`${f.field_name}`} value={o} name={o} />} label={o} onChange={handleChange} />
+                                <FormControlLabel control={<Checkbox defaultChecked={i === 0} data-index={f.id} id={`${f.field_name}`} value={o} name={o} />} label={o} onChange={e=>handleChange(e, f.id)} />
                             ))}
                     </FormGroup>
                 </FormControl>
