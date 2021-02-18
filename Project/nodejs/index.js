@@ -828,7 +828,7 @@ function createForm(lecturer_email, title, description, fields, callback)
 
 function searchForms(content, callback)
 {
-    con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + con.escape(content) + "%", "%" + con.escape(content) + "%"], function (err, result, fields) 
+    con.query('SELECT form_id, username, title, description, status FROM form JOIN lecturer ON form.lecturer_email = lecturer.email WHERE (title LIKE ? OR username LIKE ?) AND status = "Open"', ["%" + content + "%", "%" + content + "%"], function (err, result, fields) 
     {
         if (err)
         {
